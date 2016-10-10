@@ -1,63 +1,67 @@
-//точка входа
-var express = require("express");
-var bodyparser = require("body-parser");
-//var favicon = require("express-favicon");
-var path = require("path");
-var log = require('./libs/logger')(module);
+// Entry point
+var express = require('express');
+var bodyparser = require('body-parser');
+var path = require('path');
+var logger = require('./libs/logger')(module);
 var morgan = require('morgan');
-var app = express();
-var StationModel = require('./libs/mongoose').StationModel;
+var config = require('./config');
+var mongoose = require('mongoose');
+var handlers = require('./libs/handlers');
 
-//module using
-//app.use(favicon()); // отдаем стандартную фавиконку, можем здесь же свою задать
+
+// Create express.js app
+var app = express();
+
+
+// Adding middleware
 app.use(morgan("dev"));
 app.use(bodyparser.json()); // стандартный модуль, для парсинга JSON в запросах
 //app.use(express.methodOverride()); // поддержка put и delete
-app.use(express.static(path.join(__dirname, "public"))); // запуск статического файлового сервера, который смотрит на папку public/ (в нашем случае отдает index.html)
+app.use(express.static(path.join(__dirname, config.server.staticPath))); // запуск статического файлового сервера, который смотрит на папку public/ (в нашем случае отдает index.html)
 
 
-//routes
-app.get("/api", function (req, res) {
-    res.end("Big brother is watching you...");
+// Connecting to DB
+mongoose.connect(config.db.url);
+var db = mongoose.connection;
+db.on('open', function () {
+    logger.info('Successfully connected to ' + config.db.url);
 });
+db.on('error', function () {
+    logger.error('Failed to connect to ' + config.db.url);
+    process.exit(-1);
+})
 
-app.get('/api/stations', function(req, res) {
-    return StationModel.find(function (err, stations) {
-        if (!err) {
-            return res.send(stations);
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s', res.statusCode, err.message);
-            return res.send({error: 'Server error'});
-        }
-    });
-});
 
-app.post('/api/stations', function(req, res) {
-    var station = new StationModel({
-        title: req.body.title
-    });
+// Routes
+handlers.setHandlers(app);
 
-    station.save(function (err) {
-        if (!err) {
-            log.info("station created");
-            return res.send({ status: 'OK'});
-        } else {
-            console.log(err);
-            if(err.name == 'ValidationError') {
-                res.statusCode = 400;
-                res.send({ error: 'Validation error' });
-            } else {
-                res.statusCode = 500;
-                res.send({ error: 'Server error' });
-            }
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-        }
-    });
-});
 
-//server launch
-var port = process.env.PORT || 8000;
+// app.post('/api/stations', function(req, res) {
+//     var station = new StationModel({
+//         title: req.body.title
+//     });
+//
+//     station.save(function (err) {
+//         if (!err) {
+//             logger.info("station created");
+//             return res.send({ status: 'OK'});
+//         } else {
+//             console.log(err);
+//             if(err.name == 'ValidationError') {
+//                 res.statusCode = 400;
+//                 res.send({ error: 'Validation error' });
+//             } else {
+//                 res.statusCode = 500;
+//                 res.send({ error: 'Server error' });
+//             }
+//             logger.error('Internal error(%d): %s',res.statusCode,err.message);
+//         }
+//     });
+// });
+
+
+// Server launch
+var port = process.env.PORT || config.server.defaultPort;
 app.listen(port, function() {
-    log.info("BusStat server started at " + port);
+    logger.info("BusStat server started at " + port);
 });
