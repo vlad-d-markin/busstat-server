@@ -1,6 +1,6 @@
 // Entry point
 var express = require('express');
-var bodyparser = require('body-parser');
+var bodyParser = require('body-parser');
 var path = require('path');
 var logger = require('./libs/logger')(module);
 var morgan = require('morgan');
@@ -15,7 +15,8 @@ var app = express();
 
 // Adding middleware
 app.use(morgan("dev"));
-app.use(bodyparser.json()); // стандартный модуль, для парсинга JSON в запросах
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.json()); // стандартный модуль, для парсинга JSON в запросах
 //app.use(express.methodOverride()); // поддержка put и delete
 app.use(express.static(path.join(__dirname, config.server.staticPath))); // запуск статического файлового сервера, который смотрит на папку public/ (в нашем случае отдает index.html)
 
@@ -29,7 +30,7 @@ db.on('open', function () {
 db.on('error', function () {
     logger.error('Failed to connect to ' + config.db.url);
     process.exit(-1);
-})
+});
 
 
 // Routes

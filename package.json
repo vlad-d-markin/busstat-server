@@ -5,7 +5,7 @@
   "main": "application/application.js",
   "scripts": {
     "start": "node application/application.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests"
   },
   "repository": {
     "type": "git",
@@ -18,12 +18,22 @@
   },
   "homepage": "https://github.com/vlad-d-markin/busstat-server#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-favicon": "^2.0.0",
+    "express-session": "^1.14.1",
     "express-static": "^1.0.3",
+    "jsonwebtoken": "^7.1.9",
+    "method-override": "^2.3.6",
     "mongoose": "^4.6.3",
     "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
   }
 }
