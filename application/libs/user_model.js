@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 
 var User = new Schema({
-    login: { type: String, required: true },
+    login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, defaultValue: "user"}
 });
@@ -12,6 +12,6 @@ var User = new Schema({
 
 
 
-var UserModel = mongoose.model('Station', User);
+var UserModel = mongoose.model('User', User);
 
 module.exports = UserModel;

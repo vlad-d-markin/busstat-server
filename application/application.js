@@ -7,10 +7,25 @@ var morgan = require('morgan');
 var config = require('./config');
 var mongoose = require('mongoose');
 var handlers = require('./libs/handlers');
+var jwt = require('jwt-simple');
+
+var passport = require('./libs/login');
+//var cookieParser = require('cookie-parser');
+//var cookieSession = require('cookie-session');
+
 
 
 // Create express.js app
 var app = express();
+
+
+// Middlewares, которые должны быть определены до passport:
+//app.use(cookieParser())
+//app.use(cookieSession( { secret: 'SECRET' } ));
+
+// Passport:
+//app.use(passport.initialize());     // инициализация passport
+//app.use(passport.session());        // passport использует сессии в экспресс (сессии сохраняются)
 
 
 // Adding middleware
@@ -19,7 +34,6 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.use(bodyParser.json()); // стандартный модуль, для парсинга JSON в запросах
 //app.use(express.methodOverride()); // поддержка put и delete
 app.use(express.static(path.join(__dirname, config.server.staticPath))); // запуск статического файлового сервера, который смотрит на папку public/ (в нашем случае отдает index.html)
-
 
 // Connecting to DB
 mongoose.connect(config.db.url);
@@ -33,7 +47,9 @@ db.on('error', function () {
 });
 
 
+
 // Routes
+app.all('/api/*', [handlers.jwtauth]);
 handlers.setHandlers(app);
 
 
