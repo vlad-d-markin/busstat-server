@@ -10,7 +10,8 @@ var config = {
     },
 
     token: {
-        secret: "petooh"
+        secret: "petooh",
+        options : { session: false}
     }
 };
 

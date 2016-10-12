@@ -6,75 +6,43 @@ var logger = require('./libs/logger')(module);
 var morgan = require('morgan');
 var config = require('./config');
 var mongoose = require('mongoose');
+var auth = require('./libs/auth');
+
 var handlers = require('./libs/handlers');
-var jwt = require('jwt-simple');
-
-var passport = require('./libs/login');
-//var cookieParser = require('cookie-parser');
-//var cookieSession = require('cookie-session');
-
 
 
 // Create express.js app
 var app = express();
 
 
-// Middlewares, которые должны быть определены до passport:
-//app.use(cookieParser())
-//app.use(cookieSession( { secret: 'SECRET' } ));
-
-// Passport:
-//app.use(passport.initialize());     // инициализация passport
-//app.use(passport.session());        // passport использует сессии в экспресс (сессии сохраняются)
-
-
 // Adding middleware
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(bodyParser.json()); // стандартный модуль, для парсинга JSON в запросах
-//app.use(express.methodOverride()); // поддержка put и delete
 app.use(express.static(path.join(__dirname, config.server.staticPath))); // запуск статического файлового сервера, который смотрит на папку public/ (в нашем случае отдает index.html)
+app.use(auth().initialize());
+
 
 // Connecting to DB
 mongoose.connect(config.db.url);
 var db = mongoose.connection;
 db.on('open', function () {
-    logger.info('Successfully connected to ' + config.db.url);
+    logger.info('Successfully connected to DB ' + config.db.url);
 });
 db.on('error', function () {
-    logger.error('Failed to connect to ' + config.db.url);
+    logger.error('Failed to connect to DB ' + config.db.url);
     process.exit(-1);
 });
 
 
 
 // Routes
-app.all('/api/*', [handlers.jwtauth]);
-handlers.setHandlers(app);
+var apiRoutes = require('./routes/api');
+var openRoutes = require('./routes/open');
+app.use('/', openRoutes);
+app.use('/api', apiRoutes);
 
 
-// app.post('/api/stations', function(req, res) {
-//     var station = new StationModel({
-//         title: req.body.title
-//     });
-//
-//     station.save(function (err) {
-//         if (!err) {
-//             logger.info("station created");
-//             return res.send({ status: 'OK'});
-//         } else {
-//             console.log(err);
-//             if(err.name == 'ValidationError') {
-//                 res.statusCode = 400;
-//                 res.send({ error: 'Validation error' });
-//             } else {
-//                 res.statusCode = 500;
-//                 res.send({ error: 'Server error' });
-//             }
-//             logger.error('Internal error(%d): %s',res.statusCode,err.message);
-//         }
-//     });
-// });
 
 
 // Server launch

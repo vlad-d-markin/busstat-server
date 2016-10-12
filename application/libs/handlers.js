@@ -1,6 +1,6 @@
 var StationModel = require('./station_model');
 var logger = require('./logger')(module);
-var userManager = require('./login');
+var userManager = require('./user_manager');
 
 
 var apicalls = {
@@ -55,36 +55,6 @@ module.exports.setHandlers = function (app) {
         });
     });
 
-    // Local login
-    app.post('/login/local', function (req, res) {
-
-        passport.authenticate('local', {
-            failureRedirect: '/login',          // маршурты перенаправления
-            successRedirect: '/'
-        });
-    });
-
-
-    app.get('/api/test', function (req, res) {
-        res.end("SECRET CONTENT");
-    });
-
-
-    // VK login
-    app.get('/login/vk',
-        //passport.authenticate('vkontakte'),
-        function (req, res) {
-            // The request will be redirected to vk.com for authentication, so
-            // this function will not be called.
-            res.json({ status : 'VK!!!!1'});
-        });
-
-    app.get('/auth/vkontakte/callback',
-        //passport.authenticate('vkontakte', { failureRedirect: '/login' }),
-        function (req, res) {
-            // Successful authentication, redirect home.
-            res.redirect('/');
-        });
 
 
     // Get list of all stations

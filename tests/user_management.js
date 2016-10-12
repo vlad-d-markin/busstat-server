@@ -1,7 +1,7 @@
 var config = require('./../application/config');
 var chai = require('chai');
 var expect = chai.expect;
-var userManagement = require('./../application/libs/login');
+var userManagement = require('./../application/libs/user_manager');
 var mongoose = require('mongoose');
 
 mongoose.connect(config.db.url);
