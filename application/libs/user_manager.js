@@ -1,3 +1,8 @@
+
+// ========================================
+// Module for managing user accounts
+// ========================================
+
 var UserModel = require('./user_model');
 var logger = require('./logger')(module);
 var config = require('../config');
@@ -6,13 +11,17 @@ var jwt = require('jwt-simple');
 
 
 
-var login = {
+
+module.exports = {
+    // *****************************************************************************************************************
+    // Request token by username and password. On success attaches field token to user object
+    // *****************************************************************************************************************
     requestToken  : function (login, password, callback) {
         UserModel.findOne({ login: login, password: password }, function(err, user) {
             if(err) return callback(err, null);
             if(!user) return callback(new Error('User ' + login + ' not found'), null);
 
-            var expires = moment().add(7, 'days').valueOf();
+            var expires = moment().add(config.token.life.amount, config.token.life.unit).valueOf();
 
             var token = jwt.encode({
                 id: user._id,
@@ -25,6 +34,9 @@ var login = {
     },
 
 
+    // *****************************************************************************************************************
+    // Create new user. TODO: Hash password
+    // *****************************************************************************************************************
     createUser : function (login, password, callback) {
         var new_user = new UserModel({
             login: login,
@@ -40,44 +52,14 @@ var login = {
         });
     },
 
+
+
+    // *****************************************************************************************************************
+    // Find user in database by id
+    // *****************************************************************************************************************
     findUserById : function (id, cb) {
         UserModel.findOne({_id: id}, function(err, user) {
             cb(err, user);
         });
-    },
-
-    checkToken : function (req, res, next) {
-        var token = (req.body && req.body.token) || req.headers['x-access-token'];
-        if (token) {
-            try {
-                var decoded = jwt.decode(token, config.token.secret);
-
-                if (decoded.exp <= Date.now()) {
-                    res.json({status: "FAIL", message: "Token expired"});
-                    res.end();
-                    return;
-                }
-                UserModel.find({_id:decoded.iss}, function (err, user) {
-                    if(err) {
-                        res.json({status: "FAIL", message: err});
-                        res.end();
-                        return;
-                    }
-                    req.user = user;
-                    return next();
-                });
-            } catch (err) {
-                return next();
-            }
-        } else {
-            res.json({status: "FAIL", message: "Token not provided"});
-            res.end();
-            return;
-        }
     }
 };
-
-
-module.exports = login;
-
-

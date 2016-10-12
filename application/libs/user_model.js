@@ -1,3 +1,8 @@
+
+// ========================================
+// DB Model for users
+// ========================================
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

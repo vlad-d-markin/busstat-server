@@ -1,10 +1,14 @@
+
+// ========================================
+// Router for open endpoints
+// ========================================
+
 var express = require('express');
 var router = express.Router();
 var userManager = require('../libs/user_manager');
 var logger = require('../libs/logger')(module);
-var bodyParser = require('body-parser');
 
-//router.use(bodyParser.json());
+
 
 router.post('/registration', function (req, res) {
     userManager.createUser(req.body.login, req.body.password, function (err) {
@@ -20,7 +24,7 @@ router.post('/registration', function (req, res) {
 });
 
 
-
+// Route for requesting tokens
 router.post('/token', function (req, res) {
     if(req.body.login && req.body.password) {
         var login = req.body.login;

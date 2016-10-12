@@ -8,8 +8,6 @@ var config = require('./config');
 var mongoose = require('mongoose');
 var auth = require('./libs/auth');
 
-var handlers = require('./libs/handlers');
-
 
 // Create express.js app
 var app = express();
@@ -41,7 +39,6 @@ var apiRoutes = require('./routes/api');
 var openRoutes = require('./routes/open');
 app.use('/', openRoutes);
 app.use('/api', apiRoutes);
-
 
 
 

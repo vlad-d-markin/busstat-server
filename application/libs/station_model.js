@@ -1,4 +1,9 @@
 
+// ========================================
+// DB Model for stations
+// ========================================
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
