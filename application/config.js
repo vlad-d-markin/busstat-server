@@ -24,6 +24,11 @@ var config = {
             amount : 7,
             unit : 'days'
         }
+    },
+
+    //Hash
+    hash: {
+        saltRound: 10
     }
 };
 
