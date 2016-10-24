@@ -9,9 +9,9 @@ var userManager = require('../libs/user_manager');
 var logger = require('../libs/logger')(module);
 
 
-
+//Registration of new User
 router.post('/registration', function (req, res) {
-    userManager.createUser(req.body.login, req.body.password, function (err) {
+    userManager.createUser(req.body.login, req.body.password, 'user', function (err) {
         if(err) {
             res.json({success: false, error: err}).end();
             logger.warn('Failed to create user with login ' + req.body.login + ' Error: ' + JSON.stringify(err));

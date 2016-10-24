@@ -7,6 +7,7 @@ var morgan = require('morgan');
 var config = require('./config');
 var mongoose = require('mongoose');
 var auth = require('./libs/auth');
+var userMan = require('./libs/user_manager');
 
 
 // Create express.js app

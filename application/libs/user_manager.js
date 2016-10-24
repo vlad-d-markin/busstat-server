@@ -44,9 +44,9 @@ module.exports = {
 
 
     // *****************************************************************************************************************
-    // Create new user. TODO: Hash password
+    // Create new user.
     // *****************************************************************************************************************
-    createUser : function (login, password, callback) {
+    createUser : function (login, password, role, callback) {
         bcrypt.hash(password, config.hash.saltRound, function(err, hash) {
             // Store hash in your password DB.
             if (err){
@@ -55,7 +55,7 @@ module.exports = {
             var new_user = new UserModel({
                 login: login,
                 password: hash,
-                role: 'user'
+                role: role
             });
             new_user.save(function (err) {
                 if(err) {

@@ -7,9 +7,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-
+// Station table model in DB
 var Station = new Schema({
-    title: { type: String, required: true }
+    title: { type: String, required: true, unique: true }
 });
 
 // Validation
