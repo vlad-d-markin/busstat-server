@@ -54,4 +54,59 @@ router.delete('/stations', auth().authenticate(), function(req,res){
         logger.info('Station not deleted. You are not admin.');
     }
 });
+
+
+router.get('/stations', auth().authenticate(), function (req,res) {
+    stationManager.getStations(function (err, stations) {
+        if(err){
+            res.json({success: false, error: err.message}).end();
+            logger.warn(' Error: ' + err.message);
+        }
+        else{
+            res.json({success: true, stations: stations}).end();
+            logger.info('User '+req.user.login+" got list of stations!");
+        }
+    })
+});
+
+
+router.put('/stations', auth().authenticate(), function(req,res){
+    if(req.user.role == 'admin'){
+        stationManager.editStation(req,function(err){
+            if(err){
+                res.json({success: false, error: err.message}).end();
+                logger.warn(' Error: ' + err.message);
+            }
+            else{
+                res.json({success: true}).end();
+                logger.info('Station '+req.body.curtitle+" was changed!");
+            }
+        })
+    }
+    else{
+        res.json({success: false, error: 'you are not admin'}).end();
+        logger.info('Station not changed. You are not admin.');
+    }
+});
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
