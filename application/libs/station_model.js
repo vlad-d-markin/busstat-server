@@ -6,7 +6,6 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-//var autoIncrement = require("mongodb-autoincrement");
 var autoIncrement = require("mongoose-auto-increment");
 
 
@@ -16,8 +15,7 @@ var Station = new Schema({
     s_id: { type: Number }
 });
 
-
-//var connection = mongoose.createConnection(config.db.url);
+// Configure id autoincrement
 autoIncrement.initialize(mongoose.connection);
 Station.plugin(autoIncrement.plugin, {
     model: 'Station',

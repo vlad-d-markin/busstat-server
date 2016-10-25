@@ -15,40 +15,18 @@ var bcrypt = require('bcrypt');
 
 module.exports = {
     // *****************************************************************************************************************
-    // Request token by username and password. On success attaches field token to user object
-    // *****************************************************************************************************************
-    requestToken  : function (login, password, callback) {
-        UserModel.findOne({ login: login }, function(err, user) {
-            if(err) return callback(err, null);
-            if(!user) return callback(new Error('User ' + login + ' not found'), null);
-
-            bcrypt.compare(password, user.password, function(err, res) {
-                if(err)
-                    return callback(err);
-                if(res){
-                    var expires = moment().add(config.token.life.amount, config.token.life.unit).valueOf();
-
-                    var token = jwt.encode({
-                        id: user._id,
-                        exp: expires
-                    }, config.token.secret);
-
-                    user.token = token;
-                    callback(null, user);
-                }
-                else
-                    return callback(new Error('incorrect password'), null);
-            });
-        });
-    },
-
-
-    // *****************************************************************************************************************
     // Create new user.
     // *****************************************************************************************************************
     createUser : function (login, password, role, callback) {
+        if(!login) {
+            return(callback(new Error('Login not defined')));
+        }
+        if(!password) {
+            return(callback(new Error('Password not defined')));
+        }
+
+        // Store hash in your password DB.
         bcrypt.hash(password, config.hash.saltRound, function(err, hash) {
-            // Store hash in your password DB.
             if (err){
                 return callback(err);
             }
@@ -59,14 +37,54 @@ module.exports = {
             });
             new_user.save(function (err) {
                 if(err) {
-                    logger.warn('Failed to create user. Login: ' + login + ' Error: ' + JSON.stringify(err));
+                    return callback(err);
                 }
-                callback(err);
+                else {
+                    return callback(null);
+                }
             });
         });
-
     },
 
+
+    // *****************************************************************************************************************
+    // Request token by username and password. On success attaches field token to user object
+    // *****************************************************************************************************************
+    requestToken  : function (login, password, callback) {
+        if(!login) {
+            return callback(new Error('Login not defined'), null);
+        }
+        if(!password) {
+            return callback(new Error('Password not defined'), null);
+        }
+
+        UserModel.findOne({ login: login }, function(err, user) {
+            if(err) {
+                return callback(err, null);
+            }
+            if(!user) {
+                return callback(new Error('User ' + login + ' not found'), null);
+            }
+            // password comparison
+            bcrypt.compare(password, user.password, function(err, res) {
+                if(err) {
+                    return callback(err);
+                }
+                if(!res) {
+                    return callback(new Error('Incorrect password'), null);
+                }
+
+                var expires = moment().add(config.token.life.amount, config.token.life.unit).valueOf();
+                var token = jwt.encode({
+                    id: user._id,
+                    exp: expires
+                }, config.token.secret);
+
+                user.token = token;
+                callback(null, user);
+            });
+        });
+    },
 
 
     // *****************************************************************************************************************
@@ -77,4 +95,5 @@ module.exports = {
             cb(err, user);
         });
     }
+
 };

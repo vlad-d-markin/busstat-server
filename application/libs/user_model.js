@@ -10,7 +10,7 @@ var Schema = mongoose.Schema;
 var User = new Schema({
     login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, defaultValue: "user"}
+    role: { type: String, defaultValue: "user"}             // "user" or "admin"
 });
 
 var UserModel = mongoose.model('User', User);

@@ -9,86 +9,91 @@ var logger = require('../libs/logger')(module);
 var stationManager = require('../libs/station_manager');
 var auth = require('../libs/auth');
 
+
 // Autharization of new User
 router.get('/test', auth().authenticate(), function (req, res) {
     res.json({ success: true, message: "Test api call", user: req.user}).end();
 });
 
-//Creation of new station
-router.post('/stations', auth().authenticate(), function(req,res){
-    if(req.user.role =='admin') {
-        stationManager.createStation(req.body.title, function (err) {
-            if (err) {
-                res.json({success: false, error: err.message}).end();
-                logger.warn(' Error: ' + err.message);
-            }
-            else {
-                res.json({success: true}).end();
-                logger.info('Station created. Title: ' + req.body.title);
-            }
-        })
-    }
-    else{
-        res.json({success: false, error: 'you are not admin'}).end();
-        logger.info('Station not created. You are not admin.');
-    }
-});
 
-
-//Deleting station
-router.delete('/stations/:s_id', auth().authenticate(), function(req,res){
-    if(req.user.role == 'admin'){
-        stationManager.deleteStation(req.params.s_id, function (err) {
-            if(err){
-                res.json({success: false, error: err.message}).end();
-                logger.warn(' Error: ' + err.message);
-            }
-            else {
-                res.json({success: true}).end();
-                logger.info('Station deleted. Title: ' + req.body.title);
-            }
-        })
-    }
-    else{
-        res.json({success: false, error: 'you are not admin'}).end();
-        logger.info('Station not deleted. You are not admin.');
-    }
-});
-
-
+// Receiving station list
 router.get('/stations', auth().authenticate(), function (req,res) {
-    console.log("TITLE = "+req.params.title);
     stationManager.getStations(function (err, stations) {
         if(err){
             res.json({success: false, error: err.message}).end();
-            logger.warn(' Error: ' + err.message);
+            logger.warn('Receiving station list error: ' + err.message);
         }
         else{
             res.json({success: true, stations: stations}).end();
-            logger.info('User '+req.user.login+" got list of stations!");
+            logger.info('User '+req.user.login+" got list of stations");
         }
     })
 });
 
 
+// Creation new station
+router.post('/stations', auth().authenticate(), function(req,res){
+    if(req.user.role =='admin') {
+        stationManager.createStation(req.body.title, function (err) {
+            if (err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('Creating <'+req.body.title+'> station error: ' + err.message);
+            }
+            else {
+                res.json({success: true}).end();
+                logger.info('New station <'+req.body.title+'> was created by '+req.user.login);
+            }
+        })
+    }
+    else{
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to create new station');
+    }
+});
+
+
+// Deleting station
+router.delete('/stations/:s_id', auth().authenticate(), function(req,res){
+    if(req.user.role == 'admin'){
+        stationManager.deleteStation(req.params.s_id, function (err) {
+            if(err){
+                res.json({success: false, error: err.message}).end();
+                logger.warn('Deleting station ID='+req.params.s_id+' error: '+err.message);
+            }
+            else {
+                res.json({success: true}).end();
+                logger.info('Station ID='+req.params.s_id+' was deleted by '+req.user.login);
+            }
+        })
+    }
+    else{
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to delete station');
+    }
+});
+
+
+// Editing station
 router.put('/stations/:s_id', auth().authenticate(), function(req,res){
     if(req.user.role == 'admin'){
         stationManager.editStation(req.params.s_id, req.body,function(err){
             if(err){
                 res.json({success: false, error: err.message}).end();
-                logger.warn(' Error: ' + err.message);
+                logger.warn('Editing station ID='+req.params.s_id+' error: '+err.message);
             }
             else{
                 res.json({success: true}).end();
-                logger.info('Station '+req.body.curtitle+" was changed!");
+                logger.info('Station ID='+req.params.s_id+' ('+req.body.title+') was edited by '+req.user.login);
             }
         })
     }
     else{
-        res.json({success: false, error: 'you are not admin'}).end();
-        logger.info('Station not changed. You are not admin.');
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to edit station');
     }
 });
+
+
 module.exports = router;
 
 

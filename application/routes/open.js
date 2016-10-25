@@ -9,16 +9,16 @@ var userManager = require('../libs/user_manager');
 var logger = require('../libs/logger')(module);
 
 
-//Registration of new User
+// Registration of new User
 router.post('/registration', function (req, res) {
     userManager.createUser(req.body.login, req.body.password, 'user', function (err) {
         if(err) {
-            res.json({success: false, error: err}).end();
-            logger.warn('Failed to create user with login ' + req.body.login + ' Error: ' + JSON.stringify(err));
+            res.json({success: false, error: err.message}).end();
+            logger.warn('Creating user '+req.body.login+' error: '+err.message);
         }
         else {
             res.json({success: true, token: 'HERE_WILL_BE_TOKEN'}).end();
-            logger.info('User created. Login: ' + req.body.login);
+            logger.info('User was created. Login: ' + req.body.login);
         }
     })
 });
@@ -26,24 +26,16 @@ router.post('/registration', function (req, res) {
 
 // Route for requesting tokens
 router.post('/token', function (req, res) {
-    if(req.body.login && req.body.password) {
-        var login = req.body.login;
-        var password = req.body.password;
-
-        userManager.requestToken(login, password, function (err, user) {
-            if(err) {
-                res.json({ success: false, error: err.message});
-                logger.warn("Error happened during requesting token");
-                return;
-            }
-
+    userManager.requestToken(req.body.login, req.body.password, function (err, user) {
+        if(err) {
+            res.json({ success: false, error: err.message});
+            logger.warn('Requesting token error: '+err.message);
+        }
+        else {
             res.json({success: true, token: user.token}).end();
-        });
-    }
-    else {
-        logger.warn("Login and (or) password are not provided");
-        res.json({success: false, error: "Login and (or) password are not provided"}).end();
-    }
+            logger.info('Requesting '+req.body.login+'\'s token was successful');
+        }
+    });
 });
 
 
