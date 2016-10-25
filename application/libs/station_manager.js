@@ -17,18 +17,20 @@ module.exports ={
         new_station.save(function (err) {
             if(err){
                 return callback(err);
+            } else {
+                callback(null);
             }
         });
     },
 
     //Deleting station
-    deleteStation  : function  (title, callback) {
-        StationModel.findOneAndRemove({title: title}, function(err,station){
+    deleteStation  : function  (s_id, callback) {
+        StationModel.findOneAndRemove({s_id: s_id}, function(err,station){
             if(err){
                 return callback(err);
             }
             if(!station){
-                return callback(new Error('Failed to delete station. Title: ' + title));
+                return callback(new Error('Failed to delete station. s_id: ' + s_id));
             }
             return callback(null);
         });
@@ -36,7 +38,7 @@ module.exports ={
 
 
     getStations   : function (callback) {
-        StationModel.find({},{title:1,_id:0},function (err,stations) {
+        StationModel.find({},{title:1,s_id:1},function (err,stations) {
             if(err){
                 return callback(err,null);
             }
@@ -47,24 +49,25 @@ module.exports ={
     },
 
 
-    editStation   : function (req,callback) {
-        if(!req.body.curtitle)
-            return callback(new Error("Station title not defined"));
+    editStation   : function (s_id, body,callback) {
+        if(!s_id)
+            return callback(new Error("Station ID not defined"));
         else{
-            StationModel.findOne({title: req.body.curtitle}, function(err,station){
+            StationModel.findOne({s_id: s_id}, function(err,station){
                 if(err){
                     return callback(err);
                 }
                 if(!station){
                     return callback(new Error("Station not found"));
                 }
-                if(req.body.title){
-                    station.title = req.body.title;
+                if(!body.title){
+                    return callback(new Error("New title not defined"));
+                } else {
+                    station.title = body.title;
+                    station.save();
+                    return callback(null);
                 }
-                station.save();
-                return callback(null);
             })
         }
-
     }
 };

@@ -20,6 +20,7 @@
   "dependencies": {
     "bcrypt": "^0.8.7",
     "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-alpha.1",
@@ -31,7 +32,9 @@
     "jwt-simple": "^0.5.0",
     "method-override": "^2.3.6",
     "moment": "^2.15.1",
+    "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^4.6.3",
+    "mongoose-auto-increment": "^5.0.1",
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-jwt": "^2.1.0",

@@ -36,9 +36,9 @@ router.post('/stations', auth().authenticate(), function(req,res){
 
 
 //Deleting station
-router.delete('/stations', auth().authenticate(), function(req,res){
+router.delete('/stations/:s_id', auth().authenticate(), function(req,res){
     if(req.user.role == 'admin'){
-        stationManager.deleteStation(req.body.title, function (err) {
+        stationManager.deleteStation(req.params.s_id, function (err) {
             if(err){
                 res.json({success: false, error: err.message}).end();
                 logger.warn(' Error: ' + err.message);
@@ -57,6 +57,7 @@ router.delete('/stations', auth().authenticate(), function(req,res){
 
 
 router.get('/stations', auth().authenticate(), function (req,res) {
+    console.log("TITLE = "+req.params.title);
     stationManager.getStations(function (err, stations) {
         if(err){
             res.json({success: false, error: err.message}).end();
@@ -70,9 +71,9 @@ router.get('/stations', auth().authenticate(), function (req,res) {
 });
 
 
-router.put('/stations', auth().authenticate(), function(req,res){
+router.put('/stations/:s_id', auth().authenticate(), function(req,res){
     if(req.user.role == 'admin'){
-        stationManager.editStation(req,function(err){
+        stationManager.editStation(req.params.s_id, req.body,function(err){
             if(err){
                 res.json({success: false, error: err.message}).end();
                 logger.warn(' Error: ' + err.message);
