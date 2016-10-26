@@ -4,7 +4,6 @@
 // ========================================
 
 var StationModel = require('./station_model');
-var logger = require('./logger')(module);
 
 
 module.exports ={
@@ -49,19 +48,15 @@ module.exports ={
 
     // Editing station
     editStation   : function (s_id, body,callback) {
-        if(!s_id) {
-            return callback(new Error('Station ID not defined'));
+        if(!body.title){
+            return callback(new Error("New title not defined"));
         }
-
         StationModel.findOne({s_id: s_id}, function(err,station){
             if(err){
                 return callback(err);
             }
             if(!station){
-                return callback(new Error('Station not found'));
-            }
-            if(!body.title){
-                return callback(new Error("New title not defined"));
+                return callback(new Error('Station was not found'));
             }
 
             station.title = body.title;
