@@ -24,6 +24,9 @@ module.exports = {
         if(!password) {
             return(callback(new Error('Password not defined')));
         }
+        if(!role) {
+            role = 'user';
+        }
 
         // Store hash in your password DB.
         bcrypt.hash(password, config.hash.saltRound, function(err, hash) {
@@ -44,6 +47,11 @@ module.exports = {
                 }
             });
         });
+    },
+
+
+    removeUser : function (login, callback) {
+        UserModel.findOneAndRemove({login : login}, callback);
     },
 
 
