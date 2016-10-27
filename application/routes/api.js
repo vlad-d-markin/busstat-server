@@ -8,6 +8,7 @@ var router = express.Router();
 var logger = require('../libs/logger')(module);
 var stationManager = require('../libs/station_manager');
 var auth = require('../libs/auth');
+var routeManager = require('../libs/route_manager');
 
 
 // Autharization of new User
@@ -93,6 +94,19 @@ router.put('/stations/:s_id', auth().authenticate(), function(req,res){
     }
 });
 
+
+router.get('/routes', auth().authenticate(), function (req,res) {
+    routeManager.createRoute("85","bus",20,function (err) {
+        if(err){
+            res.json({success: false, error: err.message}).end();
+            logger.warn('Что-то пошло не так');
+        }
+        else{
+            res.json({success: true}).end();
+            logger.info('Красиво');
+        }
+    })
+});
 
 module.exports = router;
 
