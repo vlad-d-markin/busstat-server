@@ -17,9 +17,13 @@ mongoose.Promise = global.Promise;
 
 var s_id_finder = function(title, callback) {
     StationModel.findOne({title: title}, function(err,station) {
-        if (err) throw new Error("Find station error");
-        if (!station) throw new Error("S_ID_FINDER station error");
-        return callback(station.s_id);
+        if (err) {
+            return callback(null, new Error("Find station error"));
+        }
+        if (!station) {
+            return callback(null, new Error("S_ID_FINDER station error"));
+        }
+        return callback(station.s_id, null);
     });
 };
 
@@ -95,20 +99,83 @@ describe('Station management', function () {
      });
 
 
+    // Editing
+    describe('editStation()', function () {
+        var test_title = 'TEST_STATION_TITLE';
+        var test_new_title = 'NEW_STATION_TITLE';
+        var test_good_body = { title: test_new_title };
+        var test_bad_body = { title1: test_new_title };
+
+        before(function(done){
+            var new_station = new StationModel( {title: test_title} );
+            new_station.save(function (err) {
+                if(err) throw new Error("Creating station error");
+                done();
+            });
+        });
+
+        after(function(done){
+            s_id_finder(test_new_title, function(test_s_id, err) {
+                if(err)
+                    done(err);
+
+                stationManagement.deleteStation(test_s_id, function (err) { done(err); } );
+            });
+        });
+
+
+        it('invalid station s_id', function (done) {
+            var bad_s_id = -1;
+            stationManagement.editStation(bad_s_id, test_good_body, function (err) {
+                expect(err).not.equal(null);
+                expect(err.message).to.equal('Station was not found');
+                done();
+            });
+        });
+
+        it('not defined new title', function (done) {
+            s_id_finder(test_title, function(test_s_id, err) {
+                if(err)
+                    throw err;
+
+                stationManagement.editStation(test_s_id, test_bad_body, function (err) {
+                    expect(err).not.equal(null);
+                    expect(err.message).to.equal('New title not defined');
+                    done();
+                });
+            });
+        });
+
+        it('correct editing', function (done) {
+            s_id_finder(test_title, function(test_s_id, err) {
+                if(err)
+                    throw err;
+
+                stationManagement.editStation(test_s_id, test_good_body, function (err) {
+                    expect(err).to.equal(null);
+                    done();
+                });
+            });
+        });
+
+    });
+
+
     // Deleting
     describe('deleteStation()', function () {
-        var test_title = 'TEST_STATION_TITLE';
+        var test_title = 'TEST_STATION_DELETION_TITLE';
 
-        before(function () {
+        before(function (done) {
             var new_station = new StationModel({title: test_title});
             new_station.save(function (err) {
-                if (err) throw "Creating station error";
+                done(err);
             });
         });
 
         after(function () {
             s_id_finder(test_title, function (test_s_id) {
                 stationManagement.deleteStation(test_s_id, function (err) {
+                    done(err);
                 });
             });
         });
@@ -134,54 +201,6 @@ describe('Station management', function () {
     });
 });
 
-/* TODO: WTF EXCEPRION!?
-describe('Station management: editStation()', function () {
-    var test_title = 'TEST_STATION_TITLE';
-    var test_new_title = 'NEW_STATION_TITLE';
-    var test_good_body = { title: test_new_title };
-    var test_bad_body = { title1: test_new_title };
-
-    before(function(){
-        var new_station = new StationModel( {title: test_title} );
-        new_station.save(function (err) {
-            if(err) throw "Creating station error";
-        });
-    });
-
-    after(function(){
-        s_id_finder(test_new_title, function(test_s_id) {
-            stationManagement.deleteStation(test_s_id, function (err) {} );
-        });
-    });
 
 
-    it('invalid station s_id', function (done) {
-        var bad_s_id = -1;
-        stationManagement.editStation(bad_s_id, test_good_body, function (err) {
-            expect(err).not.equal(null);
-            expect(err.message).to.equal('Station was not found');
-            done();
-        });
-    });
 
-    it('not defined new title', function (done) {
-        s_id_finder(test_title, function(test_s_id) {
-            stationManagement.editStation(test_s_id, test_bad_body, function (err) {
-                expect(err).not.equal(null);
-                expect(err.message).to.equal('Station was not found');
-                done();
-            });
-        });
-    });
-
-    it('correct editing', function (done) {
-        s_id_finder(test_title, function(test_s_id) {
-            stationManagement.editStation(test_s_id, test_good_body, function (err) {
-                expect(err).to.equal(null);
-                done();
-            });
-        });
-    });
-
-});
-*/
