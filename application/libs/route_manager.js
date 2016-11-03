@@ -9,15 +9,15 @@ module.exports ={
             transport_type: transport_type,
             cost: cost
         });
-        StationModel.findOne({title:'MININA'},function(err,station){
-            if(err){
-                return callback(err);
-            }
-            else{
-                new_route.stations.push(new DBRef('Station',station._id ));
-            }
-        });
-        console.log("obj = "+new_route);
+//         StationModel.findOne({title:'MININA'},function(err,station){
+//             if(err){
+//                 return callback(err);
+//             }
+//             else{
+//                 new_route.stations.push(new DBRef('Station',station._id ));
+//             }
+//         });
+//         console.log("obj = "+new_route);
         callback(null);
     }
 
