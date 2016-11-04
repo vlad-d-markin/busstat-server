@@ -15,8 +15,8 @@ import RestClient from 'another-rest-client'
 
 require('file?name=[name].[ext]!../public/index.html');
 
-
-var server = new RestClient("https://busstat-server.herokuapp.com");
+var server = new RestClient("");
+// var server = new RestClient("https://busstat-server.herokuapp.com");
 // var server = new RestClient("http://dev-tool-vladdmarkin900424.codeanyapp.com:8000");
 
 server.res({
