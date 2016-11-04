@@ -6,7 +6,8 @@
   "scripts": {
     "postinstall": "webpack --config ./admin-tool/webpack.config.js --progress --colors",
     "start": "node application/application.js",
-    "test": "mocha test"
+    "test": "mocha test",
+	"dev-admin" : "webpack-dev-server --progress --colors --host 0.0.0.0 --port 9000 --content-base admin-tool/public/ --config admin-tool/webpack.config.js"
   },
   "repository": {
     "type": "git",

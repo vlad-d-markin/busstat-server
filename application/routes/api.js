@@ -77,7 +77,7 @@ router.delete('/stations/:s_id', auth().authenticate(), function(req,res){
 // Editing station
 router.put('/stations/:s_id', auth().authenticate(), function(req,res){
     if(req.user.role == 'admin'){
-        stationManager.editStation(req.params.s_id, req.body,function(err){
+        stationManager.editStation(req.params.s_id, req.body, function(err){
             if(err){
                 res.json({success: false, error: err.message}).end();
                 logger.warn('Editing station ID='+req.params.s_id+' error: '+err.message);
@@ -95,18 +95,86 @@ router.put('/stations/:s_id', auth().authenticate(), function(req,res){
 });
 
 
+// Gettong list of routes
 router.get('/routes', auth().authenticate(), function (req,res) {
-    routeManager.createRoute("85","bus",20,function (err) {
+    routeManager.getAllRoutes(function (err, routes) {
         if(err){
             res.json({success: false, error: err.message}).end();
-            logger.warn('Что-то пошло не так');
-        }
-        else{
-            res.json({success: true}).end();
-            logger.info('Красиво');
+            logger.info('User '+req.user.login+' try to got list of routes');
+        } else{
+            res.json({success: true, routes: routes}).end();
+            logger.info('User '+req.user.login+' got list of routes');
         }
     })
 });
+
+// Getting the route
+router.get('/routes/:s_id', auth().authenticate(), function (req,res) {
+    routeManager.getRoute(req.params.s_id, function (err, route) {
+        if(err){
+            res.json({success: false, error: err.message}).end();
+            logger.warn('User '+req.user.login+' try to got route S_ID='+req.params.s_id);
+        } else{
+            res.json({success: true, route: route}).end();
+            logger.info('User '+req.user.login+' got route "'+route.title+'"');
+        }
+    })
+});
+
+// Creating station
+router.post('/routes', auth().authenticate(), function (req, res) {
+    if(req.user.role == 'admin') {
+        routeManager.createRoute(req.body, function(err) {
+            if(err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('User '+req.user.login+' try to create new route');
+            } else {
+                res.json({success: true}).end();
+                logger.info('User '+req.user.login+' create route new route "'+req.body.title+'"');
+            }
+        });
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to delete station');
+    }
+});
+
+// Deleting the route
+router.delete('/routes/:s_id', auth().authenticate(), function (req,res) {
+    if(req.user.role == 'admin') {
+        routeManager.deleteRoute(req.params.s_id, function (err) {
+            if (err){
+                res.json({success: false, error: err.message}).end();
+                logger.warn('User '+req.user.login+' try to delete route S_ID='+req.params.s_id);
+            } else {
+                res.json({success: true}).end();
+                logger.info('User '+req.user.login+' delete route S_ID='+req.params.s_id)
+            }
+        });
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to delete station');
+    }
+});
+
+// Editting the route
+router.put('/routes/:s_id', auth().authenticate(), function(req, res) {
+    if(req.user.role == 'admin') {
+        routeManager.editRoute(req.params.s_id, req.body, function (err) {
+            if (err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('Admin '+req.user.login+' try to change route S_ID='+req.params.s_id);
+            } else {
+                res.json({success: true}).end();
+                logger.info('Admin '+req.user.login+' changed route S_ID='+req.params.s_id);
+            }
+        })
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to delete station');
+    }
+});
+
 
 module.exports = router;
 

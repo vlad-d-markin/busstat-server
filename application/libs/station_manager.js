@@ -47,7 +47,7 @@ module.exports ={
     },
 
     // Editing station
-    editStation   : function (s_id, body,callback) {
+    editStation   : function (s_id, body, callback) {
         if(!body.title){
             return callback(new Error("New title not defined"));
         }
