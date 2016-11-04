@@ -3,7 +3,7 @@
 // Module for managing user accounts
 // ========================================
 
-var UserModel = require('./user_model');
+var UserModel = require('./../models/user_model');
 var logger = require('./logger')(module);
 var config = require('../config');
 var moment = require('moment');

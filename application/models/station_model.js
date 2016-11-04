@@ -15,6 +15,7 @@ var Station = new Schema({
     s_id: { type: Number }
 });
 
+
 // Configure id autoincrement
 autoIncrement.initialize(mongoose.connection);
 Station.plugin(autoIncrement.plugin, {

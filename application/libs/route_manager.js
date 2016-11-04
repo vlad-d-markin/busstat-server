@@ -1,12 +1,18 @@
-var RouteModel = require('./route_model');
+
+// ========================================
+// Module for managing route objects
+// ========================================
+
+
+var RouteModel = require('./../models/route_model');
 
 
 module.exports ={
     // Receiving route list
-    createRoute   :  function (route,callback) {
+    createRoute   :  function (route, callback) {
 
         if(!route.title || !route.transport_type || !route.cost) {
-            return callback(new Error('Route incorrect'));
+            return callback(new Error('Incorrect route'));
         }
 
         var new_route = new RouteModel({
@@ -25,7 +31,7 @@ module.exports ={
 
     // Getting list of routes
     getAllRoutes    :  function (callback) {
-        RouteModel.find({},{},function (err, routes) {
+        RouteModel.find({},{__v: false, _id: false},function (err, routes) {
             if(err) {
                 return callback(err, null);
             } else{
@@ -35,14 +41,14 @@ module.exports ={
     },
 
     // Getting the route
-    getRoute    :  function (s_id, callback) {
-        RouteModel.findOne({s_id: s_id}, {}, function (err, route) {
+    getRoute    :  function (r_id, callback) {
+        RouteModel.findOne({r_id: r_id}, {__v: false, _id: false}, function (err, route) {
             if(err) {
                 return callback(err, null);
             }
 
             if(!route) {
-                return callback(new Error('Route was not found'), null);
+                return callback(new Error('Route was not exist'), null);
             } else {
                 return callback(null, route);
             }
@@ -50,8 +56,8 @@ module.exports ={
     },
 
     // Deleting the route
-    deleteRoute    :  function (s_id, callback) {
-        RouteModel.findOneAndRemove({s_id: s_id}, function(err, route){
+    deleteRoute    :  function (r_id, callback) {
+        RouteModel.findOneAndRemove({r_id: r_id}, function(err, route){
             if(err){
                 return callback(err);
             }
@@ -63,8 +69,8 @@ module.exports ={
     },
 
     // Changing the route
-    editRoute    :  function (s_id, new_route, callback) {
-        RouteModel.findOne({s_id: s_id}, function(err, route){
+    editRoute    :  function (r_id, new_route, callback) {
+        RouteModel.findOne({r_id: r_id}, function(err, route){
             if(err){
                 return callback(err);
             }

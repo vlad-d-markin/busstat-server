@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-  Button, ControlLabel, FormGroup, FormControl, Pagination, Panel, Glyphicon, Grid, Row, Col,
-  Table, ListGroup, ListGroupItem, Alert, ButtonToolbar } from 'react-bootstrap';
-
-import StationActions from './components/station_actions.jsx';
+import { Button, Panel, Glyphicon, Row, Col, Alert } from 'react-bootstrap';
 
 
-class StationsAlert extends React.Component {
-  render() {
-    return(<Alert >{this.props.text}</Alert>)
-  }
-}
+// New components
+import NewStationForm from './components/NewStationForm.jsx';
+import StationsTable from './components/StationsTable.jsx';
+
 
 
 export default class Stations extends React.Component {
@@ -20,11 +15,8 @@ export default class Stations extends React.Component {
     this.state = {
       stations : this.props.route.resource,
       stationsList : [],
-      newStation : {
-        title : ''
-      },
-      
-      submitDisabled : false,
+
+      alerts : [],
       
       showAlert: false,
       alertStyle : 'warning',
@@ -35,24 +27,38 @@ export default class Stations extends React.Component {
 
 
     this.update = this.update.bind(this);
-    this.submitNewStation = this.submitNewStation.bind(this);
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
-    this.update = this.update.bind(this);
     this.showAlert = this.showAlert.bind(this);
 
     this.update();
+
+    this.newStationFormDone = this.newStationFormDone.bind(this);
+    this.stationActionDone = this.stationActionDone.bind(this);
   }
 
-  showAlert(text, style) {
-    this.setState({ showAlert: true, alertStyle : style, alertText : text });
-    window.setTimeout(function () {
-      this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
-    }.bind(this), 3000);
+  // New handlers
+  newStationFormDone(error) {
+    if(error) {
+      this.showAlert('Failed to add new station. Error: ' + JSON.stringify(error), 'danger');
+    }
+    else {
+      this.showAlert('Successfully created new station', 'success');
+      this.update();
+    }
   }
-  
+
+
+  stationActionDone(message, error) {
+    if(error) {
+      this.showAlert(message, 'danger');
+    }
+    else {
+      this.showAlert(message, 'success');
+      this.update();
+    }
+  }
+
   update() {
-    this.state.stations.get().then(function(resp) {   
+    this.state.stations.get().then(function(resp) {
       if(resp.success) {
         this.setState({stationsList : resp.stations});
         console.log('Successfully updated stations list');
@@ -64,86 +70,28 @@ export default class Stations extends React.Component {
       }
     }.bind(this));
   }
-  
-  submitNewStation() {
-    console.log('New station ' + this.state.newStation.title);
-    this.setState({ submitDisabled : true });
-    
-    this.state.stations.post(this.state.newStation).then(function(resp){
-      if(resp.success) {
-        this.update();
-        this.showAlert('Successfully added new station', 'success');
-        this.setState({ newStation : { title : "" }} );
-      }
-      else {
-        this.showAlert('Failed to add new station. Error: ' + JSON.stringify(resp.error), 'danger');
-        console.log(resp.error);
-      }
-      this.setState({ submitDisabled : false });
-    }.bind(this));
-  }
-  
-  handleTitleChange(e) {
-    this.setState({ newStation : { title : e.target.value }} );
-  }
 
-  handleSelect(e) {
-    console.log("Page: " + e);
-    this.setState({ activePage : e} );
-  }
 
-  render() {   
-    var stationTableItems = this.state.stationsList.map(function(station, idx){
-      return(
-        <tr key={idx}>
-          <td>{idx + 1}</td>
-          <td>{station.title}</td>
-          <td>{station.s_id}</td>
-          <td>not yet</td>
-          <td>
-              <StationActions
-                  station={station}
-                  onSuccess={this.update}
-                  onAlert={this.showAlert}
-                  resource={this.state.stations(station.s_id)}/>
-          </td>
-        </tr>
-      );
-    }.bind(this));
+
+  // Deprecated
+  showAlert(text, style) {
+    this.setState({ showAlert: true, alertStyle : style, alertText : text });
+    window.setTimeout(function () {
+      this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
+    }.bind(this), 3000);
+  }
+  // ==========
+
+
+
+  render() {
     
     var alert = this.state.showAlert ? <Alert bsStyle={this.state.alertStyle}>{this.state.alertText}</Alert> : '';
 
-    const rowsPerPage = 15;
-    var pagination =
-        <Pagination
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            items={Math.ceil(stationTableItems.length / rowsPerPage)}
-            maxButtons={5}
-            activePage={this.state.activePage}
-            onSelect={this.handleSelect} />;
 
     return (
       <div>
-        <Panel header="Add new station" bsStyle="primary">
-          <form>
-            <FormGroup controlId="newStationTitle">
-              <ControlLabel>Title: </ControlLabel>
-              <FormControl
-                  type="text"
-                  value={this.state.newStation.title}
-                  placeholder="Enter new station title"
-                  onChange={this.handleTitleChange}></FormControl>
-            </FormGroup>
-            <Button bsStyle="primary" onClick={this.submitNewStation} disabled={this.state.submitDisabled} >
-              <Glyphicon glyph="ok" /> Submit</Button>
-          </form>
-        </Panel>
-
+          <NewStationForm stations={this.state.stations} onDone={this.newStationFormDone} />
 
             <Row>
               <Col sm={4}>
@@ -154,24 +102,12 @@ export default class Stations extends React.Component {
               <Col sm={8}>{alert}</Col>
             </Row>
 
-
-
-         <Table striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>S_ID</th>
-                <th>Coordinates</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stationTableItems.slice((this.state.activePage-1) * rowsPerPage, this.state.activePage * rowsPerPage)}
-            </tbody>
-         </Table>
-
-        {pagination}
+          <StationsTable
+              stations={this.state.stationsList}
+              stationsResource={this.state.stations}
+              onActionDone={this.stationActionDone}
+              rowsPerPage={14}
+          />
      </div>
     );
   }

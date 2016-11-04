@@ -3,13 +3,29 @@
 // Module for managing station objects
 // ========================================
 
-var StationModel = require('./station_model');
+var StationModel = require('./../models/station_model');
 
 
 module.exports ={
+
+    // Receiving the station
+    getStation   : function (s_id, callback) {
+        StationModel.findOne({s_id: s_id}, {title: true, s_id: true}, function (err, station) {
+            if(err) {
+                return callback(err, null);
+            }
+            if(!station) {
+                return callback(new Error('Station was not exist'), null);
+            }
+
+
+            return callback(null, station);
+        });
+    },
+
     // Receiving station list
-    getStations   : function (callback) {
-        StationModel.find({},{title: true, s_id: true},function (err,stations) {
+    getAllStations   : function (callback) {
+        StationModel.find({}, {title: true, s_id: true}, function (err,stations) {
             if(err){
                 return callback(err,null);
             }

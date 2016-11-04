@@ -9,7 +9,7 @@ var Route = new Schema({
     transport_type: { type: String, required: true },
     cost:           { type: Number, required: true },
     stations:       { type: [] },
-    s_id:           { type: Number }
+    r_id:           { type: Number }
 
 });
 
@@ -18,7 +18,7 @@ var Route = new Schema({
 autoIncrement.initialize(mongoose.connection);
 Route.plugin(autoIncrement.plugin, {
     model:      'Route',
-    field:      's_id',
+    field:      'r_id',
     startAt:     0,
     incrementBy: 1
 });
