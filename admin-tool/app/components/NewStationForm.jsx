@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, ControlLabel, FormGroup, FormControl, Panel, Glyphicon, ButtonToolbar } from 'react-bootstrap';
 
-
+// Props: stations [ARC resource], onDone [function(error)]
 export default class NewStationForm extends React.Component {
     constructor(props) {
         super(props);
@@ -12,7 +12,7 @@ export default class NewStationForm extends React.Component {
                 title : ''
             },
             controlsDisabled : false
-        }
+        };
 
         // Bind context
         this.submitNewStation   = this.submitNewStation.bind(this);

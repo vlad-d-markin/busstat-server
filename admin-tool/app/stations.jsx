@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Button, ControlLabel, FormGroup, FormControl, Pagination, Panel, Glyphicon, Grid, Row, Col,
-  Table, ListGroup, ListGroupItem, Alert, ButtonToolbar } from 'react-bootstrap';
+import { Button, Panel, Glyphicon, Row, Col, Alert } from 'react-bootstrap';
 
 
 // New components
@@ -59,18 +57,8 @@ export default class Stations extends React.Component {
     }
   }
 
-
-
-
-  showAlert(text, style) {
-    this.setState({ showAlert: true, alertStyle : style, alertText : text });
-    window.setTimeout(function () {
-      this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
-    }.bind(this), 3000);
-  }
-  
   update() {
-    this.state.stations.get().then(function(resp) {   
+    this.state.stations.get().then(function(resp) {
       if(resp.success) {
         this.setState({stationsList : resp.stations});
         console.log('Successfully updated stations list');
@@ -82,6 +70,18 @@ export default class Stations extends React.Component {
       }
     }.bind(this));
   }
+
+
+
+  // Deprecated
+  showAlert(text, style) {
+    this.setState({ showAlert: true, alertStyle : style, alertText : text });
+    window.setTimeout(function () {
+      this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
+    }.bind(this), 3000);
+  }
+  // ==========
+
 
 
   render() {

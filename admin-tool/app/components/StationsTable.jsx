@@ -19,7 +19,7 @@ export default class StationsTable extends React.Component {
         this.handleSelect = this.handleSelect.bind(this);
     }
 
-
+    // Handle page selection
     handleSelect(e) {
         this.setState({ page : e} );
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, Glyphicon, ButtonToolbar, FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
 
 
-
+// Props: resource [ARC resource], station [Object], onDone [function(message, error)]
 export default class StationActions extends React.Component {
     constructor(props) {
         super(props);
