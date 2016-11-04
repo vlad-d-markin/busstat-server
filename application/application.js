@@ -34,7 +34,6 @@ db.on('error', function () {
 });
 
 
-
 // Routes
 var apiRoutes = require('./routes/api');
 var openRoutes = require('./routes/open');

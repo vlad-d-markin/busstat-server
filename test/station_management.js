@@ -36,7 +36,7 @@ var s_id_finder = function(title, callback) {
 describe('Station management', function () {
 
     // Getting all stations
-    describe('getStation()', function () {
+    describe('getStation', function () {
         it('getting list of station', function (done) {
             stationManagement.getStations(function (err, stations) {
                 expect(err).to.equal(null);
@@ -55,8 +55,7 @@ describe('Station management', function () {
 
 
     // Creating new station
-    describe('createStation()', function () {
-
+    describe('createStation', function () {
          var test_title = 'TEST_STATION_TITLE';
 
          after(function () {
@@ -100,7 +99,7 @@ describe('Station management', function () {
 
 
     // Editing
-    describe('editStation()', function () {
+    describe('editStation', function () {
         var test_title = 'TEST_STATION_TITLE';
         var test_new_title = 'NEW_STATION_TITLE';
         var test_good_body = { title: test_new_title };
@@ -162,7 +161,7 @@ describe('Station management', function () {
 
 
     // Deleting
-    describe('deleteStation()', function () {
+    describe('deleteStation', function () {
         var test_title = 'TEST_STATION_DELETION_TITLE';
 
         before(function (done) {
