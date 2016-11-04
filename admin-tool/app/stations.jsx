@@ -5,6 +5,9 @@ import {
 
 import StationActions from './components/station_actions.jsx';
 
+// New components
+import NewStationForm from './components/NewStationForm.jsx';
+
 
 class StationsAlert extends React.Component {
   render() {
@@ -42,7 +45,20 @@ export default class Stations extends React.Component {
     this.showAlert = this.showAlert.bind(this);
 
     this.update();
+
+    this.newStationFormDone = this.newStationFormDone.bind(this);
   }
+
+  // New handlers
+  newStationFormDone(error) {
+    if(error) {
+      this.showAlert('Failed to add new station. Error: ' + JSON.stringify(error), 'danger');
+    }
+    else {
+      this.showAlert('Successfully created new station', 'success');
+    }
+  }
+
 
   showAlert(text, style) {
     this.setState({ showAlert: true, alertStyle : style, alertText : text });
@@ -129,26 +145,12 @@ export default class Stations extends React.Component {
 
     return (
       <div>
-        <Panel header="Add new station" bsStyle="primary">
-          <form>
-            <FormGroup controlId="newStationTitle">
-              <ControlLabel>Title: </ControlLabel>
-              <FormControl
-                  type="text"
-                  value={this.state.newStation.title}
-                  placeholder="Enter new station title"
-                  onChange={this.handleTitleChange}></FormControl>
-            </FormGroup>
-            <Button bsStyle="primary" onClick={this.submitNewStation} disabled={this.state.submitDisabled} >
-              <Glyphicon glyph="ok" /> Submit</Button>
-          </form>
-        </Panel>
-
+          <NewStationForm stations={this.state.stations} onDone={this.newStationFormDone} />
 
             <Row>
               <Col sm={4}>
                 <Panel>
-                  <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
+                  <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refsssresh</Button>
                 </Panel>
               </Col>
               <Col sm={8}>{alert}</Col>
