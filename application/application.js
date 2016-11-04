@@ -35,10 +35,14 @@ db.on('error', function () {
 
 
 // Routes
-var apiRoutes = require('./routes/api');
 var openRoutes = require('./routes/open');
+var stationApiRoutes = require('./routes/stations_api');
+var routeApiRoutes = require('./routes/routes_api');
+var noteApiRotes = require('./routes/notes_api');
 app.use('/', openRoutes);
-app.use('/api', apiRoutes);
+app.use('/api', stationApiRoutes);
+app.use('/api', routeApiRoutes);
+app.use('/api', noteApiRotes);
 
 
 

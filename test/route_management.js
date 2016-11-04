@@ -7,7 +7,7 @@ var config = require('./../application/config');
 var chai = require('chai');
 var expect = chai.expect;
 var routeManagement = require('./../application/libs/route_manager');
-var RouteModel = require('./../application/libs/route_model');
+var RouteModel = require('./../application/models/route_model');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 

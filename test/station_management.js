@@ -8,7 +8,7 @@ var config = require('./../application/config');
 var chai = require('chai');
 var expect = chai.expect;
 var stationManagement = require('./../application/libs/station_manager');
-var StationModel = require('./../application/libs/station_model');
+var StationModel = require('./../application/models/station_model');
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
