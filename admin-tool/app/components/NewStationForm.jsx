@@ -11,17 +11,18 @@ export default class NewStationForm extends React.Component {
             newStation : {
                 title : ''
             },
-
             controlsDisabled : false
         }
 
         // Bind context
-        this.submitNewStation = this.submitNewStation.bind(this);
-        this.cleanInputs = this.cleanInputs.bind(this);
-        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.submitNewStation   = this.submitNewStation.bind(this);
+        this.cleanInputs        = this.cleanInputs.bind(this);
+        this.handleTitleChange  = this.handleTitleChange.bind(this);
         this.setInProgressState = this.setInProgressState.bind(this);
     }
 
+
+    // Disable controls
     setInProgressState(yes) {
         this.setState({ controlsDisabled : yes });
     }
@@ -49,15 +50,18 @@ export default class NewStationForm extends React.Component {
         }.bind(this));
     }
 
+
     // Clean all inputs
     cleanInputs() {
         this.setState({ newStation : { title : '' }});
     }
 
+
     // Handle changing input
     handleTitleChange(e) {
         this.setState({ newStation : { title : e.target.value }} );
     }
+
 
     // Render component
     render() {
@@ -75,9 +79,11 @@ export default class NewStationForm extends React.Component {
 
                     <ButtonToolbar>
                         <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
-                            <Glyphicon glyph="remove" /> Clear</Button>
+                            <Glyphicon glyph="remove" /> Clear
+                        </Button>
                         <Button bsStyle="primary" onClick={this.submitNewStation} disabled={this.state.controlsDisabled} >
-                            <Glyphicon glyph="ok" /> Submit</Button>
+                            <Glyphicon glyph="ok" /> Submit
+                        </Button>
                     </ButtonToolbar>
                 </form>
             </Panel>
