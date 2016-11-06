@@ -15,7 +15,7 @@ module.exports ={
                 return callback(err, null);
             }
             if(!station) {
-                return callback(new Error('Station was not exist'), null);
+                return callback(new Error('Incorrect s_id'), null);
             }
 
 
