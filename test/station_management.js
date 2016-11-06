@@ -38,7 +38,7 @@ describe('Station management', function () {
     // Getting all stations
     describe('getStation', function () {
         it('getting list of station', function (done) {
-            stationManagement.getStations(function (err, stations) {
+            stationManagement.getAllStations(function (err, stations) {
                 expect(err).to.equal(null);
                 expect(stations).to.be.a('Array');
                 expect(stations[0]).to.have.property('_id');
@@ -66,7 +66,7 @@ describe('Station management', function () {
 
 
          it('invalid station title (too few symbols)', function (done) {
-             var title = 'TS'
+             var title = 'TS';
              stationManagement.createStation(title, function (err) {
                  expect(err).not.equal(null);
                  expect(err.name).to.equal('ValidationError');
@@ -85,6 +85,7 @@ describe('Station management', function () {
 
          it('valid station title', function (done) {
              stationManagement.createStation(test_title, function (err) {
+                 if(err) throw err;
                  StationModel.findOne({title: test_title}, function (err, station) {
                      if (err) throw "Error find station title";
 

@@ -72,7 +72,7 @@ ReactDOM.render(
   <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={About} />
-        <Route path="users" resource={server.api.test} component={Users}/>
+        <Route path="users" resource={server.api.users} component={Users}/>
         <Route path="stations" resource={server.api.stations} component={Stations}/>
         <Route path="routes" component={Routes}/>
         <Route path="*" component={About}/>

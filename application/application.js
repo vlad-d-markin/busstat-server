@@ -7,7 +7,6 @@ var morgan = require('morgan');
 var config = require('./config');
 var mongoose = require('mongoose');
 var auth = require('./libs/auth');
-var userMan = require('./libs/user_manager');
 
 
 // Create express.js app
@@ -36,10 +35,12 @@ db.on('error', function () {
 
 // Routes
 var openRoutes = require('./routes/open');
+var userRoutes = require('./routes/users_api');
 var stationApiRoutes = require('./routes/stations_api');
 var routeApiRoutes = require('./routes/routes_api');
 var noteApiRotes = require('./routes/notes_api');
 app.use('/', openRoutes);
+app.use('/api', userRoutes);
 app.use('/api', stationApiRoutes);
 app.use('/api', routeApiRoutes);
 app.use('/api', noteApiRotes);

@@ -55,7 +55,7 @@ function deleteTestRoutes(done) {
 // *************************************************************
 //                          TESTS
 // *************************************************************
-
+// TODO: THIS IS NOT WORKS!
 describe('Route management', function () {
 
     //after (function (done) { deleteTestRoutes(done); });

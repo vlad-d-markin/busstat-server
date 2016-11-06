@@ -20,7 +20,7 @@ var config = {
       }
     ]
   }
-  
+  //webpack --watch --config admin-tool/webpack.config.js --progress --colors
 };
 
 module.exports = config;
