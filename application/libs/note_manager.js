@@ -23,26 +23,26 @@ module.exports = {
 
         var serv_time = Date.now();
         if( (note_time - serv_time) > MAX_AHEAD ) {
-            return callback(new Error('Node time is ahead of the server time'));
+            return callback(new Error('Time mismatch'));
         }
         if( (serv_time - note_time) > MAX_LAG ) {
-            return callback(new Error('Node time lags behind time of server'));
+            return callback(new Error('Time out'));
         }
 
         stationManager.getStation(s_id, function(err, station) {
             if(err) {
-                return callback(err);
+                return callback(err,null);
             }
             if(!station) {
-                return callback(new Error('Station was not exist'));
+                return callback(new Error('Incorrect s_id'));
             }
 
             routeManager.getRoute(r_id, function(err, route) {
                 if(err) {
-                    return callback(err);
+                    return callback(err,null);
                 }
                 if(!route) {
-                    return callback(new Error('Route was not exist'))
+                    return callback(new Error('Incorrect r_id'))
                 }
 
                 var new_note = new NoteModel({
