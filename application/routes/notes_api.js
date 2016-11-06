@@ -35,12 +35,10 @@ router.get('/notes', auth().authenticate(), function (req, res) {
 router.post('/notes/:s_id/:r_id', auth().authenticate(), function (req, res) {
     noteManager.createNote(req.body.time, req.params.s_id, req.params.r_id, function(err) {
         if(err) {
-            console.log('FALSE = ' + err);
             res.json({success: false, error: err.message}).end();
             logger.warn('Adding note by user ' + req.user.login + ' error: ' + err.message);
         }
         if(!err) {
-            console.log('TRUE  = '+err);
             res.json({success: true}).end();
             logger.info('User '+req.user.login+' sent note: S_ID = '+req.params.s_id+' R_ID = '
                 +req.params.r_id+' TIME = '+req.body.time);

@@ -18,15 +18,15 @@ module.exports = {
     createNote: function (time, s_id, r_id, callback) {
         var note_time = Date.parse(time);
         if (isNaN(note_time) == true) {
-            return callback(new Error('Incorrect time'),null);
+            return callback(new Error('Incorrect time'));
         }
 
         var serv_time = Date.now();
         if( (note_time - serv_time) > MAX_AHEAD ) {
-            return callback(new Error('Time mismatch'),null);
+            return callback(new Error('Time mismatch'));
         }
         if( (serv_time - note_time) > MAX_LAG ) {
-            return callback(new Error('Time out'),null);
+            return callback(new Error('Time out'));
         }
 
         stationManager.getStation(s_id, function(err, station) {
@@ -34,7 +34,7 @@ module.exports = {
                 return callback(err,null);
             }
             if(!station) {
-                return callback(new Error('Incorrect s_id'),null);
+                return callback(new Error('Incorrect s_id'));
             }
 
             routeManager.getRoute(r_id, function(err, route) {
@@ -42,7 +42,7 @@ module.exports = {
                     return callback(err,null);
                 }
                 if(!route) {
-                    return callback(new Error('Incorrect r_id'),null)
+                    return callback(new Error('Incorrect r_id'))
                 }
 
                 var new_note = new NoteModel({
@@ -53,9 +53,9 @@ module.exports = {
 
                 new_note.save(function (err) {
                     if(err) {
-                        return callback(err,null);
+                        return callback(err);
                     }
-                    return callback(null,new_note);
+                    return callback(null);
                 });
             });
         });
