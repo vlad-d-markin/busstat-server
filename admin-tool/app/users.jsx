@@ -14,9 +14,12 @@ export default class Users extends React.Component {
         this.state = {
             usersResource : this.props.route.userURL,
             registrationURL: this.props.route.registrationURL,
-            usersList : []
-        };
+            usersList : [],
 
+            showAlert: false,
+            alertStyle : 'warning',
+            alertText : '',
+        };
 
         this.update();
     }
@@ -36,23 +39,12 @@ export default class Users extends React.Component {
     }
 
 
-    // New handlers
-    newUserFormDone(error) {
-        console.log("NEW STATION FORM DONE")
-       /* if(error) {
-            this.showAlert('Failed to add new station. Error: ' + JSON.stringify(error), 'danger');
-        }
-        else {
-            this.showAlert('Successfully created new station', 'success');
-            this.update();
-        }*/
-    }
-
-
     render() {
 
         //var table = this.state.userList.map(function(message){ return(<strong> {message} </strong>) });
-    
+
+        var alert = this.state.showAlert ? <Alert bsStyle={this.state.alertStyle}>{this.state.alertText}</Alert> : '';
+
         return (
             <div>
                 <NewUserForm usersResource={this.state.registrationURL} onDone={this.newUserFormDone} />

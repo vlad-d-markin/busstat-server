@@ -85,7 +85,7 @@ export default class Stations extends React.Component {
 
 
   render() {
-    
+
     var alert = this.state.showAlert ? <Alert bsStyle={this.state.alertStyle}>{this.state.alertText}</Alert> : '';
 
 
@@ -99,7 +99,7 @@ export default class Stations extends React.Component {
                   <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
                 </Panel>
               </Col>
-              <Col sm={8}>{alert}</Col>
+                <Col sm={8}>{alert}</Col>
             </Row>
 
           <StationsTable
