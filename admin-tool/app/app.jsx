@@ -22,7 +22,7 @@ var server = new RestClient("");
 server.res({
   token : 0,
   registration: '',
-  api : ['users', 'stations', 'test']
+  api : ['users', 'stations', 'test', 'admin']
 });
 
 server.token.post({ login: "admin", password: "admin"}).then(function(res){
@@ -84,7 +84,12 @@ ReactDOM.render(
   <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={About} />
-        <Route path="users" userURL={server.api.users} registrationURL={server.registration} component={Users}/>
+        <Route path="users"
+               userURL={server.api.users}
+               adminURL={server.api.admin}
+               registrationURL={server.registration}
+               component={Users}
+        />
         <Route path="stations" resource={server.api.stations} component={Stations}/>
         <Route path="routes" component={Routes}/>
         <Route path="*" component={About}/>

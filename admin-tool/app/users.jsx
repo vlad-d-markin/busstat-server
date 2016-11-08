@@ -12,15 +12,17 @@ export default class Users extends React.Component {
         super(props);
     
         this.state = {
+            usersList : [],
             usersResource : this.props.route.userURL,
             registrationURL: this.props.route.registrationURL,
-            usersList : [],
+            adminRegURL: this.props.route.adminURL,
 
             showAlert: false,
             alertStyle : 'warning',
             alertText : '',
         };
 
+        this.update = this.update.bind(this);
         this.update();
     }
 
@@ -41,13 +43,14 @@ export default class Users extends React.Component {
 
     render() {
 
-        //var table = this.state.userList.map(function(message){ return(<strong> {message} </strong>) });
-
         var alert = this.state.showAlert ? <Alert bsStyle={this.state.alertStyle}>{this.state.alertText}</Alert> : '';
 
         return (
             <div>
-                <NewUserForm usersResource={this.state.registrationURL} onDone={this.newUserFormDone} />
+                <NewUserForm
+                    adminRegURL={this.state.adminRegURL}
+                    userRegURL={this.state.registrationURL}
+                    onDone={this.update} />
                 <Row>
                     <Panel></Panel>
                 </Row>

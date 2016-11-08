@@ -57,6 +57,7 @@ export default class Stations extends React.Component {
     }
   }
 
+
   update() {
     this.state.stations.get().then(function(resp) {
       if(resp.success) {

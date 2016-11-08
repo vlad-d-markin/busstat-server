@@ -1,9 +1,12 @@
 import React from 'react';
 import { Alert, Row, Button, DropdownButton, MenuItem, InputGroup, Col, ControlLabel, Form, FormGroup, FormControl, Panel, Glyphicon, ButtonToolbar } from 'react-bootstrap';
 
-//import AlertsBox from './components/AlertsBox.jsx';
 
-// Props: stations [ARC resource], onDone [function(error)]
+// Props:
+// stations [ARC resource]
+// onDone [function(error)]
+// adminRegURL [server route] to create new user
+// userRegURL [server route] to create new admin
 export default class NewUserForm extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +32,7 @@ export default class NewUserForm extends React.Component {
         this.handleUserRoleSelect = this.handleUserRoleSelect.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.newUserFormDone = this.newUserFormDone.bind(this);
+        this.answerRequest = this.answerRequest.bind(this);
     }
 
     // Disable controls
@@ -39,25 +43,28 @@ export default class NewUserForm extends React.Component {
 
     // Send new station to server
     submitNewUser() {
-        console.log("NEWUSER = "+this.state.newUser.login + ' PWR='+this.state.newUser.password);
         console.log("Trying to add new user... [" + JSON.stringify(this.state.newUser) + "]");
-
         this.setInProgressState(true);
 
+        if(this.state.userRole === 'admin') {
+            this.props.adminRegURL.post(this.state.newUser).then(this.answerRequest);
+        } else {
+            this.props.userRegURL.post(this.state.newUser).then(this.answerRequest);
+        }
+    }
 
-        // Send request to server
-        this.props.usersResource.post(this.state.newUser).then(function(resp){
-            this.setInProgressState(false);
-            if(resp.success) {
-                this.cleanInputs();
-                console.log("Successfully created new user");
-                this.newUserFormDone(null);
-            }
-            else {
-                console.error("Failed to add new user. Error: " + JSON.stringify(resp.error));
-                this.newUserFormDone(resp.error);
-            }
-        }.bind(this));
+
+    answerRequest(resp) {
+        this.setInProgressState(false);
+        if(resp.success) {
+            this.cleanInputs();
+            console.log("Successfully created new "+this.state.userRole);
+            this.newUserFormDone(null);
+        }
+        else {
+            console.error("Failed to add new "+this.state.userRole+". Error: " + JSON.stringify(resp.error));
+            this.newUserFormDone(resp.error);
+        }
     }
 
 
@@ -92,9 +99,9 @@ export default class NewUserForm extends React.Component {
             this.showAlert('Failed to add new user. Error: ' + JSON.stringify(error), 'danger');
         }
         else {
-            this.showAlert('Successfully created new user', 'success');
-            this.update();
+            this.showAlert('Successfully created new '+this.state.userRole, 'success');
         }
+        this.props.onDone();
     }
 
     showAlert(text, style) {
@@ -169,6 +176,3 @@ export default class NewUserForm extends React.Component {
     }
 
 }
-
-
-
