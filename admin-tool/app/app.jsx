@@ -24,9 +24,20 @@ server.res({
   api : ['users', 'stations', 'test']
 });
 
+server.token.post({ login: "admin", password: "admin"}).then(function(res){
+  if(res.success) {
+    localStorage.setItem('et_admin.token', res.token);
+    console.log('Successsfully requested token');
+  }
+  else {
+    localStorage.setItem('et_admin.token', null);
+    console.error('Failed to request token');
+  }
+});
+
 server.on('request', function(xhr) {
   var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU4MDdhYzNkZjVlNTdkMGQ3MDcwNTQ1OSIsImV4cCI6MTQ3ODUyODUxOTgwOX0.s2Vc0SvxzWHZ_6f4eL3FuqJyOO6NTLUPNhdjZ4phjT8';  
-  xhr.setRequestHeader('Authorization', 'JWT ' + token);
+  xhr.setRequestHeader('Authorization', 'JWT ' + localStorage.getItem('et_admin.token') || token);
 });
 
 class App extends React.Component {
