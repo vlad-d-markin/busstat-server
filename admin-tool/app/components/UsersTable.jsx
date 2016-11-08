@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pagination, Table, Col, Row} from 'react-bootstrap';
 
-//import StationActions from './StationActions.jsx';
+import UserActions from './UserActions.jsx';
 
 
 export default class UsersTable extends React.Component {
@@ -28,9 +28,13 @@ export default class UsersTable extends React.Component {
         var usersTableItems = this.props.users.map(function(user, idx){
             return(
                 <tr key={idx}>
-                    <td>{idx + 1}</td>
+                    <td className="text-center">{idx + 1}</td>
                     <td>{user.login}</td>
-                    <td>{user.role}</td>
+                    <td >{user.role}</td>
+                    <td>
+                        <UserActions
+                            />
+                    </td>
                 </tr>
             );
         }.bind(this)).slice((this.state.page-1) * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage);
@@ -54,9 +58,10 @@ export default class UsersTable extends React.Component {
                 <Table striped bordered condensed hover>
                     <thead>
                     <tr>
-                        <th>#</th>
+                        <th width="5%" className="text-center">#</th>
                         <th>Login</th>
                         <th>Role</th>
+                        <th width="30%">Actions</th>
                     </tr>
                     </thead>
                     <tbody>

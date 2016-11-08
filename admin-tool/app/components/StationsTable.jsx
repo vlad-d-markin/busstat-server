@@ -71,7 +71,7 @@ export default class StationsTable extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {stationTableItems}
+                        {stationTableItems}
                     </tbody>
                 </Table>
                 <Row>

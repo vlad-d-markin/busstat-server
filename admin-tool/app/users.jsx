@@ -1,16 +1,19 @@
 import React from 'react';
-import {ListGroup, ListGroupItem} from 'react-bootstrap';
+import {Row, Col, Panel, Button, Glyphicon, ButtonToolbar} from 'react-bootstrap';
 
 
 // New components
+import NewUserForm from './components/NewUserForm.jsx';
 import UsersTable from './components/UsersTable.jsx';
+
 
 export default class Users extends React.Component {
     constructor(props) {
         super(props);
     
         this.state = {
-            usersResource : this.props.route.resource,
+            usersResource : this.props.route.userURL,
+            registrationURL: this.props.route.registrationURL,
             usersList : []
         };
 
@@ -32,13 +35,39 @@ export default class Users extends React.Component {
         }.bind(this));
     }
 
+
+    // New handlers
+    newUserFormDone(error) {
+        console.log("NEW STATION FORM DONE")
+       /* if(error) {
+            this.showAlert('Failed to add new station. Error: ' + JSON.stringify(error), 'danger');
+        }
+        else {
+            this.showAlert('Successfully created new station', 'success');
+            this.update();
+        }*/
+    }
+
+
     render() {
 
         //var table = this.state.userList.map(function(message){ return(<strong> {message} </strong>) });
     
         return (
             <div>
-            <h2>USER LIST</h2>
+                <NewUserForm usersResource={this.state.registrationURL} onDone={this.newUserFormDone} />
+                <Row>
+                    <Panel></Panel>
+                </Row>
+                <Row>
+                    <Col sm={4}>
+                        <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
+                    </Col>
+                    <Col sm={4}>
+                            <h3 className="text-center">USERS LIST</h3>
+                    </Col>
+                    <Col sm={4}></Col>
+                </Row>
 
                 <UsersTable
                     users={this.state.usersList}
