@@ -30,4 +30,31 @@ router.get('/users', auth().authenticate(), function (req, res) {
 });
 
 
+// Registration of new Admin
+router.post('/admin', auth().authenticate(), function (req, res) {
+    if(req.user.role == 'admin') {
+        userManager.createUser(req.body.login, req.body.password, 'admin', function (err) {
+            if(err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('['+req.user.login+']: creating admin error: '+err.message);
+            } else {
+                userManager.requestToken(req.body.login, req.body.password, function(err, user) {
+                    if(err) {
+                        res.json({success: false, error: err.message}).end();
+                        logger.warn('['+req.user.login+']: requesting token error (create admin): '+err.message);
+                    } else {
+                        res.json({success: true, token: user.token}).end();
+                        logger.info('['+req.user.login+']: created new admin. Login: ' + req.body.login);
+                    }
+                });
+            }
+        })
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to create new admin');
+    }
+});
+
+
+
 module.exports = router;

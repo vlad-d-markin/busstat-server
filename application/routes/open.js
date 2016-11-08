@@ -15,10 +15,16 @@ router.post('/registration', function (req, res) {
         if(err) {
             res.json({success: false, error: err.message}).end();
             logger.warn('Creating user '+req.body.login+' error: '+err.message);
-        }
-        else {
-            res.json({success: true, token: 'HERE_WILL_BE_TOKEN'}).end();
-            logger.info('User was created. Login: ' + req.body.login);
+        } else {
+            userManager.requestToken(req.body.login, req.body.password, function(err, user) {
+                if(err) {
+                    res.json({success: false, error: err.message}).end();
+                    logger.warn('Requesting token error (create user): '+err.message);
+                } else {
+                    res.json({success: true, token: user.token}).end();
+                    logger.info('Created new user. Login: ' + req.body.login);
+                }
+            });
         }
     })
 });
