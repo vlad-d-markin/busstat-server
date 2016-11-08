@@ -101,7 +101,6 @@ module.exports = {
             if(err){
                 return callback(err, null);
             }
-            console.log(notes);
             return callback(null, notes);
         });
     }

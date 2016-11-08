@@ -8,10 +8,27 @@ var config = require('./../application/config');
 var chai = require('chai');
 var expect = chai.expect;
 var noteManagement = require('./../application/libs/note_manager');
-var noteModel = require('./../application/models/note_model');
+var NoteModel = require('./../application/models/note_model');
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
+
+
+n_id_finder = function (time, s_id, r_id, callback) {
+    NoteModel.findOne({time: time, s_id: s_id, r_id: r_id}, function (err, note) {
+        if (err) {
+            return callback(null, new Error("Find note error"));
+        }
+        if (!note) {
+            return callback(null, new Error("Created note not find"));
+        }
+        return callback(note.n_id, null);
+    });
+};
+
+var test_r_id = 11;
+var test_s_id = 1;
+var test_time = new Date();
 
 
 
@@ -23,14 +40,9 @@ mongoose.Promise = global.Promise;
 describe('Note Management', function(){
 
     describe('createNote', function(){
-        //
-        var test_r_id = 11;
-        var test_s_id = 1;
-        var test_time = new Date();
-
         it('correct creating of note', function(done){
             noteManagement.createNote(test_time, test_s_id, test_r_id, function(err){
-                expect(err).to.equal(null);
+                           expect(err).to.equal(null);
                 done();
             })
         });
@@ -74,14 +86,51 @@ describe('Note Management', function(){
                 done();
             })
         });
-
-        after(function (done) {
-            noteModel.findOneAndRemove({time: test_time, s_id: test_s_id, r_id: test_r_id}, function (err, note) {
-                if (err) throw 'Error delete note';
-                done();
-            });
-        });
-
     });
 
+    describe('get all notes', function(){
+        it('getting list of notes', function (done) {
+            noteManagement.getAllNotes(function (err, notes) {
+                expect(err).to.equal(null);
+                expect(notes).to.be.a('Array');
+                expect(notes[0]).to.have.property('s_id');
+                expect(notes[0]).to.have.property('time');
+                expect(notes[0]).to.have.property('r_id');
+                NoteModel.count({}, function (err, count) {
+                    if (err) throw 'Error count notes';
+                    expect(notes).to.have.length(count);
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('delete note', function() {
+        it('deleting note', function (done) {
+            n_id_finder(test_time, test_s_id, test_r_id, function (test_n_id, err) {
+                if (err)
+                    done(err);
+                noteManagement.deleteNote(test_n_id, function (err){
+                    expect(err).to.equal(null);
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('get note for last n weeks', function() {
+        var test_n_weeks = 1;
+        var test_date = new Date();
+        it('get for last n weeks', function(done) {
+            noteManagement.getWeekNote(test_n_weeks,function(err, notes){
+                if(err)
+                    done(err);
+                expect(err).to.equal(null);
+                expect(test_date-notes[0].time).to.be.below(1000*60*60*24*7*test_n_weeks);
+                expect(test_date-notes[notes.length-1].time).to.be.below(1000*60*60*24*7*test_n_weeks);
+                done();
+            })
+        })
+    })
 });
+
