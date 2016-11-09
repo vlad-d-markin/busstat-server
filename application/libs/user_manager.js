@@ -111,6 +111,52 @@ module.exports = {
 
 
     // *****************************************************************************************************************
+    // Change role of the user
+    // *****************************************************************************************************************
+    changeLoginAndRole :   function(oldLogin, newLogin, newRole, callback) {
+        if(!newLogin){
+            return callback(new Error("New login not defined"));
+        }
+        if(newRole !== "admin" && newRole !== "user") {
+            return callback(new Error("New role is incorrect"));
+        }
+        UserModel.findOne({ login: oldLogin }, function(err, user) {
+            if (err) {
+                return callback(err);
+            }
+            if (!user) {
+                return callback(new Error('User ' + login + ' not found'));
+            }
+
+            user.login = newLogin;
+            user.role = newRole;
+            user.save();
+            return callback(null);
+        });
+    },
+
+
+    // *****************************************************************************************************************
+    // Change login of the user
+    // *****************************************************************************************************************
+    changeRole :   function(login, newRole, callback) {
+        UserModel.findOne({ login: login}, function(err, user){
+            if (err) {
+                return callback(err);
+            }
+            if (!user) {
+                return callback(new Error('User ' + login + ' not found'));
+            }
+
+            user.role = newRole;
+            user.save();
+            return callback(null);
+        });
+    },
+
+
+
+    // *****************************************************************************************************************
     // Find user in database by id
     // *****************************************************************************************************************
     findUserById : function (id, cb) {

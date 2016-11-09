@@ -4,13 +4,19 @@ import { Pagination, Table, Col, Row} from 'react-bootstrap';
 import UserActions from './UserActions.jsx';
 
 
+// PROPS:
+// users        [users list]
+// usersAPI     [ARC resource]
+// onActionDone [function(message, error)]
+// rowsPerPage  [Number of users per page]
 export default class UsersTable extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             page : 1,
-            rowsPerPage : this.props.rowsPerPage || 15
+            rowsPerPage : this.props.rowsPerPage || 15,
+            usersAPI : this.props.usersAPI
         };
 
         // Bind context
@@ -33,7 +39,10 @@ export default class UsersTable extends React.Component {
                     <td >{user.role}</td>
                     <td>
                         <UserActions
-                            />
+                            user={user}
+                            onDone={this.props.onActionDone}
+                            usersAPI={this.props.usersAPI}
+                        />
                     </td>
                 </tr>
             );

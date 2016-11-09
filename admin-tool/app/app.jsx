@@ -85,9 +85,9 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <IndexRoute component={About} />
         <Route path="users"
-               userURL={server.api.users}
-               adminURL={server.api.admin}
-               registrationURL={server.registration}
+               usersAPI={server.api.users}
+               adminAPI={server.api.admin}
+               registrationAPI={server.registration}
                component={Users}
         />
         <Route path="stations" resource={server.api.stations} component={Stations}/>

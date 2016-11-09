@@ -56,5 +56,39 @@ router.post('/admin', auth().authenticate(), function (req, res) {
 });
 
 
+// Changing login of user by user
+router.put('/users',auth().authenticate(), function (req, res) {
+    userManager.changeLoginAndRole(req.user.login, req.body.login, "user", function(err) {
+        if(err) {
+            res.json({success: false, error: err.message}).end();
+            logger.warn('['+req.user.login+']: changing login error: '+err.message);
+        } else {
+            res.json({success: true}).end();
+            logger.warn('['+req.user.login+']: changed login on: '+req.body.login);
+        }
+        // TODO: attach TOKEN
+    });
+});
+
+
+// Changing login of user by admin
+router.put('/users/:oldLogin', auth().authenticate(), function (req, res){
+    if(req.user.role == 'admin') {
+        userManager.changeLoginAndRole(req.params.oldLogin, req.body.login, req.body.role, function(err) {
+            if(err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('['+req.user.login+']: changing login error: '+err.message);
+            } else {
+                res.json({success: true}).end();
+                logger.warn('['+req.user.login+']: changed login and role: '+req.body.login+"  "+req.body.role);
+            }
+        });
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to change login and role of '+req.params.oldLogin);
+    }
+});
+
+
 
 module.exports = router;

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Alert, Row, Button, DropdownButton, MenuItem, InputGroup, Col, ControlLabel, Form, FormGroup, FormControl, Panel, Glyphicon, ButtonToolbar } from 'react-bootstrap';
+import { Row, Button, DropdownButton, MenuItem, InputGroup, Col, ControlLabel, Form, FormGroup,
+         FormControl, Panel, Glyphicon, ButtonToolbar } from 'react-bootstrap';
 
 
-// Props:
-// stations [ARC resource]
-// onDone [function(error)]
-// adminRegURL [server route] to create new user
-// userRegURL [server route] to create new admin
+// PROPS:
+// onDone       [function(error)]
+// adminAPI  [server route] to create new user
+// registrationAPI   [server route] to create new admin
 export default class NewUserForm extends React.Component {
     constructor(props) {
         super(props);
@@ -30,8 +30,6 @@ export default class NewUserForm extends React.Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleAdminRoleSelect = this.handleAdminRoleSelect.bind(this);
         this.handleUserRoleSelect = this.handleUserRoleSelect.bind(this);
-        this.showAlert = this.showAlert.bind(this);
-        this.newUserFormDone = this.newUserFormDone.bind(this);
         this.answerRequest = this.answerRequest.bind(this);
     }
 
@@ -47,9 +45,9 @@ export default class NewUserForm extends React.Component {
         this.setInProgressState(true);
 
         if(this.state.userRole === 'admin') {
-            this.props.adminRegURL.post(this.state.newUser).then(this.answerRequest);
+            this.props.adminAPI.post(this.state.newUser).then(this.answerRequest);
         } else {
-            this.props.userRegURL.post(this.state.newUser).then(this.answerRequest);
+            this.props.registrationAPI.post(this.state.newUser).then(this.answerRequest);
         }
     }
 
@@ -59,11 +57,10 @@ export default class NewUserForm extends React.Component {
         if(resp.success) {
             this.cleanInputs();
             console.log("Successfully created new "+this.state.userRole);
-            this.newUserFormDone(null);
-        }
-        else {
+            this.props.onDone(null);
+        } else {
             console.error("Failed to add new "+this.state.userRole+". Error: " + JSON.stringify(resp.error));
-            this.newUserFormDone(resp.error);
+            this.props.onDone(resp.error);
         }
     }
 
@@ -93,30 +90,8 @@ export default class NewUserForm extends React.Component {
     }
 
 
-    // New handlers
-    newUserFormDone(error) {
-        if(error) {
-            this.showAlert('Failed to add new user. Error: ' + JSON.stringify(error), 'danger');
-        }
-        else {
-            this.showAlert('Successfully created new '+this.state.userRole, 'success');
-        }
-        this.props.onDone();
-    }
-
-    showAlert(text, style) {
-        this.setState({ showAlert: true, alertStyle : style, alertText : text });
-        window.setTimeout(function () {
-            this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
-        }.bind(this), 3000);
-    }
-
-
     // Render component
     render() {
-
-        var alert = this.state.showAlert ? <Alert height="100px" bsStyle={this.state.alertStyle}>{this.state.alertText}</Alert> : '';
-
         return(
             <Panel header="Add new user" bsStyle="primary">
                 <Form horizontal>
@@ -157,19 +132,17 @@ export default class NewUserForm extends React.Component {
                         </Col>
                     </FormGroup>
 
-                    <Col sm={4}>
-                        <Panel>
-                            <ButtonToolbar>
-                                <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
-                                    <Glyphicon glyph="remove" /> Clear
-                                </Button>
-                                <Button bsStyle="primary" onClick={this.submitNewUser} disabled={this.state.controlsDisabled} >
-                                    <Glyphicon glyph="ok" /> Submit
-                                </Button>
-                            </ButtonToolbar>
-                        </Panel>
+                    <Col>
+                        <ButtonToolbar>
+                            <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
+                                <Glyphicon glyph="remove" /> Clear
+                            </Button>
+                            <Button bsStyle="primary" onClick={this.submitNewUser} disabled={this.state.controlsDisabled} >
+                                <Glyphicon glyph="ok" /> Submit
+                            </Button>
+                        </ButtonToolbar>
                     </Col>
-                    <Col sm={7}>{alert}</Col>
+
                 </Form>
             </Panel>
         );

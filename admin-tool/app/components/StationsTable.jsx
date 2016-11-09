@@ -13,7 +13,7 @@ export default class StationsTable extends React.Component {
         this.state = {
             page : 1,
             rowsPerPage : this.props.rowsPerPage || 15
-        }
+        };
 
         // Bind context
         this.handleSelect = this.handleSelect.bind(this);
