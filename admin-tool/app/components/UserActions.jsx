@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Modal, Glyphicon, ButtonToolbar, FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
+import { Button, DropdownButton, InputGroup, MenuItem, Modal, Glyphicon, ButtonToolbar, FormGroup,
+         FormControl, ControlLabel} from 'react-bootstrap';
 
 // PROPS:
 // user     [user = { login, role }]
@@ -16,6 +17,7 @@ export default class UserActions extends React.Component {
             user : this.props.user,
 
             newLogin : this.props.user.login,
+            newRole : this.props.user.role,
 
             editorOpen : false,
             saveDisabled : false,
@@ -29,6 +31,8 @@ export default class UserActions extends React.Component {
         this.handleLoginChange = this.handleLoginChange.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
         this.removeStation = this.removeStation.bind(this);
+        this.handleRoleAdminChange = this.handleRoleAdminChange.bind(this);
+        this.handleRoleUserChange = this.handleRoleUserChange.bind(this);
     }
 
 
@@ -50,25 +54,35 @@ export default class UserActions extends React.Component {
         this.setState({ newLogin : e.target.value });
     }
 
+    //
+    handleRoleAdminChange() {
+        this.setState({ newRole : "admin"});
+    }
+
+    //
+    handleRoleUserChange() {
+        this.setState({ newRole : "user"});
+    }
+
 
     // Save
     saveChanges() {
-        console.log("Trying to save changes. Title " + this.state.user.login);
+        this.setState({ saveDisabled: true });
 
-/*        this.setState({ saveDisabled: true });
-
-        this.props.resource.put({ title : this.state.title }).then(function (resp) {
+        this.state.usersAPI(this.state.user.login).put({ login : this.state.newLogin, role : this.state.newRole }).then(function (resp) {
             this.setState({ saveDisabled: false });
 
             if(resp.success) {
-                console.log("Successfully saved changes");
-                this.props.onDone("Successfully saved changes", null);
+                this.setState({ user: {login : this.state.newLogin}});
+                console.log("Successfully changed login-role");
+                this.props.onDone("Successfully changed login-role", null);
             }
             else {
-                console.error("Failed to save changes. Error: " + JSON.stringify(resp.error));
-                this.props.onDone("Successfully saved changes", resp.error);
+                console.error("Failed to changed login-role. Error: " + JSON.stringify(resp.error));
+                this.props.onDone("Failed to changed login-role.", resp.error);
             }
-        }.bind(this));*/
+        }.bind(this));
+
     }
 
 
@@ -136,11 +150,21 @@ export default class UserActions extends React.Component {
                         <form>
                             <FormGroup controlId="newUserLoginRole">
                                 <ControlLabel>Login: </ControlLabel>
-                                <FormControl
-                                    type="text"
-                                    value={this.state.newLogin}
-                                    placeholder="Enter new user login"
-                                    onChange={this.handleLoginChange}></FormControl>
+                                <InputGroup>
+                                    <FormControl
+                                        type="text"
+                                        value={this.state.newLogin}
+                                        placeholder="Enter new user login"
+                                        onChange={this.handleLoginChange}>
+                                    </FormControl>
+                                    <DropdownButton
+                                        componentClass={InputGroup.Button}
+                                        id="input-dropdown-addon"
+                                        title={this.state.newRole}>
+                                        <MenuItem key="1" onClick={this.handleRoleUserChange}>user</MenuItem>
+                                        <MenuItem key="2" onClick={this.handleRoleAdminChange}>admin</MenuItem>
+                                    </DropdownButton>
+                                </InputGroup>
                             </FormGroup>
                         </form>
                     </Modal.Body>

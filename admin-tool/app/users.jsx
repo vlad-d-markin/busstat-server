@@ -37,21 +37,21 @@ export default class Users extends React.Component {
 
     // New handlers
     newUserFormDone(err) {
-        if(error) {
+        if(err) {
             this.showAlert('Failed to add new user. Error: ' + JSON.stringify(err), 'danger');
         }
         else {
-            this.showAlert('Successfully created new '+this.state.userRole, 'success');
+            this.showAlert('Successfully created new user', 'success');
         }
 
     }
 
-    userActionDone(err) {
-        if(error) {
-            this.showAlert(message, 'danger');
+    userActionDone(text, err) {
+        if(err) {
+            this.showAlert(text+err.message, 'danger');
         }
         else {
-            this.showAlert(message, 'success');
+            this.showAlert(text, 'success');
             this.update();
         }
     }

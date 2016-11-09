@@ -125,7 +125,7 @@ module.exports = {
                 return callback(err);
             }
             if (!user) {
-                return callback(new Error('User ' + login + ' not found'));
+                return callback(new Error('User ' + oldLogin + ' not found'));
             }
 
             user.login = newLogin;
