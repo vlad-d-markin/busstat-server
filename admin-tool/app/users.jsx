@@ -68,7 +68,7 @@ export default class Users extends React.Component {
         this.state.usersAPI.get().then(function (resp) {
             if(resp.success) {
                 this.setState({usersList: resp.users});
-                console.log('Successfully updated users list'+resp.users);
+                console.log('Successfully updated users list');
             } else {
                 this.setState({usersList: [] });
                 this.showAlert('Failed to update users list', 'danger');

@@ -90,5 +90,24 @@ router.put('/users/:oldLogin', auth().authenticate(), function (req, res){
 });
 
 
+// Deleting the user by admin
+router.delete('/users/:login', auth().authenticate(), function (req, res) {
+    if(req.user.role == 'admin') {
+        userManager.removeUser(req.params.login, function(err) {
+            if(err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('['+req.user.login+']: deleting user error: '+err.message);
+            } else {
+                res.json({success: true}).end();
+                logger.warn('['+req.user.login+']: deleted user: '+req.params.login);
+            }
+        });
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to delete user '+req.params.login);
+    }
+});
+
+
 
 module.exports = router;

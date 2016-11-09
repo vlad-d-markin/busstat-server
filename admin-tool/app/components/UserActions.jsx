@@ -26,19 +26,20 @@ export default class UserActions extends React.Component {
 
 
         // Bind context
-        this.openEditor = this.openEditor.bind(this);
+        this.openLoginEditor = this.openLoginEditor.bind(this);
         this.hideEditor = this.hideEditor.bind(this);
         this.handleLoginChange = this.handleLoginChange.bind(this);
-        this.saveChanges = this.saveChanges.bind(this);
+        this.saveLoginAndRole = this.saveLoginAndRole.bind(this);
         this.removeStation = this.removeStation.bind(this);
         this.handleRoleAdminChange = this.handleRoleAdminChange.bind(this);
         this.handleRoleUserChange = this.handleRoleUserChange.bind(this);
+        this.savePassword = this.savePassword.bind(this);
     }
 
 
 
     //
-    openEditor() {
+    openLoginEditor() {
         this.setState({ editorOpen: true });
     }
 
@@ -66,7 +67,7 @@ export default class UserActions extends React.Component {
 
 
     // Save
-    saveChanges() {
+    saveLoginAndRole() {
         this.setState({ saveDisabled: true });
 
         this.state.usersAPI(this.state.user.login).put({ login : this.state.newLogin, role : this.state.newRole }).then(function (resp) {
@@ -86,25 +87,27 @@ export default class UserActions extends React.Component {
     }
 
 
+    savePassword() {
+        this.props.onDone("COMING SOON", null);
+    }
+
+
     // Remove station
     removeStation() {
-        console.log("I DELETE USER = "+this.state.user.login);
-
         this.setState({ removeDisabled: true });
-/*
-        this.props.resource.delete().then(function (resp) {
+        this.props.usersAPI(this.state.user.login).delete().then(function (resp) {
             this.setState({ removeDisabled: false });
 
             if(resp.success) {
-                console.log("Successfully removed station " + this.state.title);
-                this.props.onDone("Successfully removed station " + this.state.title, null);
+                console.log("Successfully removed user " + this.state.user.login);
+                this.props.onDone("Successfully removed user " + this.state.user.login, null);
             }
             else {
-                console.error("Failed to remove station " + this.state.title + ". Error: " + JSON.stringify(resp.error));
-                this.props.onDone("Failed to remove station" + this.state.title + ". Error: " +
+                console.error("Failed to remove user " + this.state.user.login + ". Error: " + JSON.stringify(resp.error));
+                this.props.onDone("Failed to remove user" + this.state.user.login + ". Error: " +
                     JSON.stringify(resp.error), resp.error);
             }
-        }.bind(this));*/
+        }.bind(this));
     }
 
 
@@ -113,7 +116,7 @@ export default class UserActions extends React.Component {
         return(
             <ButtonToolbar>
                 <Button
-                    onClick={this.openEditor}
+                    onClick={this.openLoginEditor}
                     bsStyle="primary"
                     bsSize="xsmall">
                     <Glyphicon glyph="pencil" />&nbsp;
@@ -121,7 +124,7 @@ export default class UserActions extends React.Component {
                 </Button>
 
                 <Button
-                    onClick={this.openEditor}
+                    onClick={this.savePassword}
                     bsStyle="info"
                     bsSize="xsmall">
                     <Glyphicon glyph="cog" />&nbsp;
@@ -170,7 +173,7 @@ export default class UserActions extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.hideEditor}>Close</Button>
-                        <Button bsStyle="primary" onClick={this.saveChanges} disabled={this.state.saveDisabled} >Save</Button>
+                        <Button bsStyle="primary" onClick={this.saveLoginAndRole} disabled={this.state.saveDisabled} >Save</Button>
                     </Modal.Footer>
                 </Modal>
             </ButtonToolbar>

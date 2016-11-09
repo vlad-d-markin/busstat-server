@@ -51,7 +51,15 @@ module.exports = {
 
 
     removeUser : function (login, callback) {
-        UserModel.findOneAndRemove({login : login}, callback);
+        UserModel.findOneAndRemove({login : login}, function(err, user){
+            if(err){
+                return callback(err);
+            }
+            if(!user){
+                return callback(new Error('User was not found'));
+            }
+            return callback(null);
+        });
     },
 
 

@@ -16,7 +16,8 @@ export default class UsersTable extends React.Component {
         this.state = {
             page : 1,
             rowsPerPage : this.props.rowsPerPage || 15,
-            usersAPI : this.props.usersAPI
+            usersAPI : this.props.usersAPI,
+            usersList : this.props.users
         };
 
         // Bind context
@@ -28,9 +29,7 @@ export default class UsersTable extends React.Component {
         this.setState({ page : e} );
     }
 
-
     render() {
-
         var usersTableItems = this.props.users.map(function(user, idx){
             return(
                 <tr key={idx}>
