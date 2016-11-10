@@ -111,7 +111,7 @@ export default class StationActions extends React.Component {
 
                 <Modal
                     {...this.props}
-                    show={this.state.editorLoginOpen}
+                    show={this.state.editorOpen}
                     onHide={this.hideEditor}
                     dialogClassName="custom-modal"
                 >

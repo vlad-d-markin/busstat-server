@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, DropdownButton, InputGroup, MenuItem, Modal, Glyphicon, ButtonToolbar, FormGroup,
-         FormControl, ControlLabel} from 'react-bootstrap';
+import { Button, DropdownButton, InputGroup, MenuItem, Modal, Glyphicon, ButtonToolbar,
+         FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
+
 
 // PROPS:
 // user     [user = { login, role }]
@@ -14,25 +15,26 @@ export default class UserActions extends React.Component {
         this.state = {
             usersAPI : this.props.usersAPI,
 
-            user : this.props.user,
-
+            // login changing modal
             newLogin : this.props.user.login,
             newRole : this.props.user.role,
-
-            curPassword: "",
-            newPassword: "",
-
             editorLoginOpen : false,
             saveLoginDisabled : false,
             removeLoginDisabled : false,
 
+            // password changing modal
+            curPassword: "",
+            newPassword: "",
             editorPasswordOpen : false,
             savePasswordDisabled : false,
             removePasswordDisabled : false
         };
 
 
-        // Bind context
+        // BIND CONTEXT
+        this.updateUserData = this.updateUserData.bind(this);
+
+        // login changing modal
         this.openLoginEditor = this.openLoginEditor.bind(this);
         this.hideLoginEditor = this.hideLoginEditor.bind(this);
         this.handleLoginChange = this.handleLoginChange.bind(this);
@@ -40,13 +42,25 @@ export default class UserActions extends React.Component {
         this.handleRoleUserChange = this.handleRoleUserChange.bind(this);
         this.saveLoginAndRole = this.saveLoginAndRole.bind(this);
 
+        // password changing modal
         this.openPasswordEditor = this.openPasswordEditor.bind(this);
         this.hidePasswordEditor = this.hidePasswordEditor.bind(this);
         this.handleCurPasswordChange = this.handleCurPasswordChange.bind(this);
         this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
         this.savePassword = this.savePassword.bind(this);
 
+        // deleting user modal
         this.removeUser = this.removeUser.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user != this.props.user) {
+            this.updateUserData(nextProps);
+        }
+    }
+
+    updateUserData(nextProps) {
+        this.setState({ newLogin: nextProps.user.login});
     }
 
 
@@ -61,11 +75,9 @@ export default class UserActions extends React.Component {
     saveLoginAndRole() {
         this.setState({ saveLoginDisabled: true });
 
-        this.state.usersAPI('login/'+this.state.user.login).put({ login : this.state.newLogin, role : this.state.newRole }).then(function (resp) {
+        this.state.usersAPI('login/'+this.props.user.login).put({ login : this.state.newLogin, role : this.state.newRole }).then(function (resp) {
             this.setState({ saveLoginDisabled: false, editorLoginOpen : false });
-
             if(resp.success) {
-                this.setState({ user: {login : this.state.newLogin}});
                 console.log("Successfully changed login-role");
                 this.props.onDone("Successfully changed login-role", null);
             }
@@ -74,20 +86,20 @@ export default class UserActions extends React.Component {
                 this.props.onDone("Failed to changed login-role.", resp.error);
             }
         }.bind(this));
-
     }
 
 
-
+    // Handle changing in Password editor
     openPasswordEditor()        { this.setState({ editorPasswordOpen: true }); };
     hidePasswordEditor()        { this.setState({ editorPasswordOpen: false, curPassword: "", newPassword: ""}); };
     handleCurPasswordChange(e)  { this.setState({ curPassword: e.target.value }); };
     handleNewPasswordChange(e)  { this.setState({ newPassword: e.target.value }); };
 
+    // Save new Password
     savePassword() {
         this.setState({ savePasswordDisabled: true });
 
-        this.state.usersAPI('password/'+this.state.user.login)
+        this.state.usersAPI('password/'+this.props.user.login)
             .put({ password: this.state.curPassword, newPassword: this.state.newPassword }).then(function (resp) {
 
             this.setState({ savePasswordDisabled: false, editorPasswordOpen : false, curPassword: "", newPassword: ""});
@@ -106,17 +118,17 @@ export default class UserActions extends React.Component {
 
     // Remove station
     removeUser() {
-        this.setState({ removeLoginDisabled: true });
-        this.props.usersAPI(this.state.user.login).delete().then(function (resp) {
-            this.setState({ removeLoginDisabled: false });
+        this.setState({removeLoginDisabled: true});
+        this.props.usersAPI(this.props.user.login).delete().then(function (resp) {
+            this.setState({removeLoginDisabled: false});
 
-            if(resp.success) {
-                console.log("Successfully removed user " + this.state.user.login);
-                this.props.onDone("Successfully removed user " + this.state.user.login, null);
+            if (resp.success) {
+                console.log("Successfully removed user " + this.props.user.login);
+                this.props.onDone("Successfully removed user " + this.props.user.login, null);
             }
             else {
-                console.error("Failed to remove user " + this.state.user.login + ". Error: " + JSON.stringify(resp.error));
-                this.props.onDone("Failed to remove user" + this.state.user.login + ". Error: " +
+                console.error("Failed to remove user " + this.props.user.login + ". Error: " + JSON.stringify(resp.error));
+                this.props.onDone("Failed to remove user" + this.props.user.login + ". Error: " +
                     JSON.stringify(resp.error), resp.error);
             }
         }.bind(this));
@@ -188,7 +200,6 @@ export default class UserActions extends React.Component {
                         <Button bsStyle="primary" onClick={this.saveLoginAndRole} disabled={this.state.saveLoginDisabled} >Save</Button>
                     </Modal.Footer>
                 </Modal>
-
 
                 <Modal
                     {...this.props}

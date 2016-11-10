@@ -42,6 +42,7 @@ export default class Users extends React.Component {
         }
         else {
             this.showAlert('Successfully created new user', 'success');
+            this.update();
         }
 
     }
@@ -49,8 +50,7 @@ export default class Users extends React.Component {
     userActionDone(text, err) {
         if(err) {
             this.showAlert(text+" "+err.message, 'danger');
-        }
-        else {
+        } else {
             this.showAlert(text, 'success');
             this.update();
         }

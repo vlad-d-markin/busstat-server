@@ -22,7 +22,19 @@ export default class UsersTable extends React.Component {
 
         // Bind context
         this.handleSelect = this.handleSelect.bind(this);
+        this.updateUsersList = this.updateUsersList.bind(this);
     }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.users != this.props.users) {
+            this.updateUsersList(nextProps);
+        }
+    }
+
+    updateUsersList(nextProps) {
+        this.setState({ usersList: nextProps.users});
+    }
+
 
     // Handle page selection
     handleSelect(e) {
