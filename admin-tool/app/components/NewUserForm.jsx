@@ -95,7 +95,9 @@ export default class NewUserForm extends React.Component {
         return(
             <Panel header="Add new user" bsStyle="primary">
                 <Form horizontal>
+
                     <FormGroup controlId="newUser">
+
                         <Col componentClass={ControlLabel} sm={2}>
                             Login
                         </Col>
@@ -132,17 +134,18 @@ export default class NewUserForm extends React.Component {
                         </Col>
                     </FormGroup>
 
-                    <Col>
-                        <ButtonToolbar>
-                            <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
-                                <Glyphicon glyph="remove" /> Clear
-                            </Button>
-                            <Button bsStyle="primary" onClick={this.submitNewUser} disabled={this.state.controlsDisabled} >
-                                <Glyphicon glyph="ok" /> Submit
-                            </Button>
-                        </ButtonToolbar>
-                    </Col>
-
+                    <FormGroup>
+                        <Col sm={9} smOffset={2}>
+                            <ButtonToolbar className="pull-right">
+                                <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
+                                    <Glyphicon glyph="remove" /> Clear
+                                </Button>
+                                <Button bsStyle="primary" onClick={this.submitNewUser} disabled={this.state.controlsDisabled} >
+                                    <Glyphicon glyph="ok" /> Submit
+                                </Button>
+                            </ButtonToolbar>
+                        </Col>
+                    </FormGroup>
                 </Form>
             </Panel>
         );
