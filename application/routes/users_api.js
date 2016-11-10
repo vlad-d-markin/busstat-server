@@ -57,7 +57,7 @@ router.post('/admin', auth().authenticate(), function (req, res) {
 
 
 // Changing login of user by user
-router.put('/users',auth().authenticate(), function (req, res) {
+router.put('/users/login',auth().authenticate(), function (req, res) {
     userManager.changeLoginAndRole(req.user.login, req.body.login, "user", function(err) {
         if(err) {
             res.json({success: false, error: err.message}).end();
@@ -66,13 +66,12 @@ router.put('/users',auth().authenticate(), function (req, res) {
             res.json({success: true}).end();
             logger.warn('['+req.user.login+']: changed login on: '+req.body.login);
         }
-        // TODO: attach TOKEN
     });
 });
 
 
 // Changing login of user by admin
-router.put('/users/:oldLogin', auth().authenticate(), function (req, res){
+router.put('/users/login/:oldLogin', auth().authenticate(), function (req, res){
     if(req.user.role == 'admin') {
         userManager.changeLoginAndRole(req.params.oldLogin, req.body.login, req.body.role, function(err) {
             if(err) {
@@ -107,6 +106,40 @@ router.delete('/users/:login', auth().authenticate(), function (req, res) {
         logger.info('User '+req.user.login+' try to delete user '+req.params.login);
     }
 });
+
+
+// Changing login of user by user
+router.put('/users/password',auth().authenticate(), function (req, res) {
+    userManager.changePassword(req.user.login, req.body.password, req.body.newPassword, function(err) {
+        if(err) {
+            res.json({success: false, error: err.message}).end();
+            logger.warn('['+req.user.login+']: changing password error: '+err.message);
+        } else {
+            res.json({success: true}).end();
+            logger.warn('['+req.user.login+']: changed password');
+        }
+    });
+});
+
+
+// Changing login of user by admin
+router.put('/users/password/:login', auth().authenticate(), function (req, res) {
+    if(req.user.role == 'admin') {
+        userManager.changePassword(req.params.login, req.body.password, req.body.newPassword, function(err) {
+            if(err) {
+                res.json({success: false, error: err.message}).end();
+                logger.warn('['+req.user.login+']: changing password of '+req.params.login+' error: '+err.message);
+            } else {
+                res.json({success: true }).end();
+                logger.warn('['+req.user.login+']: changed password of '+req.params.login);
+            }
+        });
+    } else {
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to change password of user '+req.params.login);
+    }
+});
+
 
 
 

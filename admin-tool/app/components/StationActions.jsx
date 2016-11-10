@@ -102,7 +102,7 @@ export default class StationActions extends React.Component {
 
                 <Button
                     onClick={this.removeStation}
-                    disabled={this.state.removeDisabled}
+                    disabled={this.state.removeLoginDisabled}
                     bsStyle="danger"
                     bsSize="xsmall">
                     <Glyphicon glyph="trash" />&nbsp;
@@ -111,7 +111,7 @@ export default class StationActions extends React.Component {
 
                 <Modal
                     {...this.props}
-                    show={this.state.editorOpen}
+                    show={this.state.editorLoginOpen}
                     onHide={this.hideEditor}
                     dialogClassName="custom-modal"
                 >
@@ -132,7 +132,7 @@ export default class StationActions extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.hideEditor}>Close</Button>
-                        <Button bsStyle="primary" onClick={this.saveChanges} disabled={this.state.saveDisabled} >Save</Button>
+                        <Button bsStyle="primary" onClick={this.saveChanges} disabled={this.state.saveLoginDisabled} >Save</Button>
                     </Modal.Footer>
                 </Modal>
             </ButtonToolbar>

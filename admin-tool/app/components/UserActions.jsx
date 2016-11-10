@@ -19,59 +19,50 @@ export default class UserActions extends React.Component {
             newLogin : this.props.user.login,
             newRole : this.props.user.role,
 
-            editorOpen : false,
-            saveDisabled : false,
-            removeDisabled : false
+            curPassword: "",
+            newPassword: "",
+
+            editorLoginOpen : false,
+            saveLoginDisabled : false,
+            removeLoginDisabled : false,
+
+            editorPasswordOpen : false,
+            savePasswordDisabled : false,
+            removePasswordDisabled : false
         };
 
 
         // Bind context
         this.openLoginEditor = this.openLoginEditor.bind(this);
-        this.hideEditor = this.hideEditor.bind(this);
+        this.hideLoginEditor = this.hideLoginEditor.bind(this);
         this.handleLoginChange = this.handleLoginChange.bind(this);
-        this.saveLoginAndRole = this.saveLoginAndRole.bind(this);
-        this.removeStation = this.removeStation.bind(this);
         this.handleRoleAdminChange = this.handleRoleAdminChange.bind(this);
         this.handleRoleUserChange = this.handleRoleUserChange.bind(this);
+        this.saveLoginAndRole = this.saveLoginAndRole.bind(this);
+
+        this.openPasswordEditor = this.openPasswordEditor.bind(this);
+        this.hidePasswordEditor = this.hidePasswordEditor.bind(this);
+        this.handleCurPasswordChange = this.handleCurPasswordChange.bind(this);
+        this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
         this.savePassword = this.savePassword.bind(this);
+
+        this.removeUser = this.removeUser.bind(this);
     }
 
 
+    // Handle changing in Login-Role editor
+    openLoginEditor()       { this.setState({ editorLoginOpen: true }); }
+    hideLoginEditor()       { this.setState({ editorLoginOpen: false,  newLogin : this.props.user.login, newRole: this.props.user.role}); }
+    handleLoginChange(e)    { this.setState({ newLogin: e.target.value }); }
+    handleRoleAdminChange() { this.setState({ newRole: "admin"}); }
+    handleRoleUserChange()  { this.setState({ newRole: "user"}); }
 
-    //
-    openLoginEditor() {
-        this.setState({ editorOpen: true });
-    }
-
-
-    //
-    hideEditor() {
-        this.setState({ editorOpen: false,  newLogin : this.props.user.login});
-    }
-
-
-    //
-    handleLoginChange(e) {
-        this.setState({ newLogin : e.target.value });
-    }
-
-    //
-    handleRoleAdminChange() {
-        this.setState({ newRole : "admin"});
-    }
-
-    //
-    handleRoleUserChange() {
-        this.setState({ newRole : "user"});
-    }
-
-
-    // Save
+    // Save new Login and Role
     saveLoginAndRole() {
-        this.setState({ saveDisabled: true });
+        this.setState({ saveLoginDisabled: true });
 
-        this.state.usersAPI(this.state.user.login).put({ login : this.state.newLogin, role : this.state.newRole }).then(function (resp) {
-            this.setState({ saveDisabled: false });
+        this.state.usersAPI('login/'+this.state.user.login).put({ login : this.state.newLogin, role : this.state.newRole }).then(function (resp) {
+            this.setState({ saveLoginDisabled: false, editorLoginOpen : false });
 
             if(resp.success) {
                 this.setState({ user: {login : this.state.newLogin}});
@@ -87,16 +78,37 @@ export default class UserActions extends React.Component {
     }
 
 
+
+    openPasswordEditor()        { this.setState({ editorPasswordOpen: true }); };
+    hidePasswordEditor()        { this.setState({ editorPasswordOpen: false, curPassword: "", newPassword: ""}); };
+    handleCurPasswordChange(e)  { this.setState({ curPassword: e.target.value }); };
+    handleNewPasswordChange(e)  { this.setState({ newPassword: e.target.value }); };
+
     savePassword() {
-        this.props.onDone("COMING SOON", null);
+        this.setState({ savePasswordDisabled: true });
+
+        this.state.usersAPI('password/'+this.state.user.login)
+            .put({ password: this.state.curPassword, newPassword: this.state.newPassword }).then(function (resp) {
+
+            this.setState({ savePasswordDisabled: false, editorPasswordOpen : false, curPassword: "", newPassword: ""});
+
+            if(resp.success) {
+                console.log("Successfully changed password");
+                this.props.onDone("Successfully changed password", null);
+            }
+            else {
+                console.error("Failed to changed password. Error: " + JSON.stringify(resp.error));
+                this.props.onDone("Failed to changed password.", new Error(resp.error));
+            }
+        }.bind(this))
     }
 
 
     // Remove station
-    removeStation() {
-        this.setState({ removeDisabled: true });
+    removeUser() {
+        this.setState({ removeLoginDisabled: true });
         this.props.usersAPI(this.state.user.login).delete().then(function (resp) {
-            this.setState({ removeDisabled: false });
+            this.setState({ removeLoginDisabled: false });
 
             if(resp.success) {
                 console.log("Successfully removed user " + this.state.user.login);
@@ -124,7 +136,7 @@ export default class UserActions extends React.Component {
                 </Button>
 
                 <Button
-                    onClick={this.savePassword}
+                    onClick={this.openPasswordEditor}
                     bsStyle="info"
                     bsSize="xsmall">
                     <Glyphicon glyph="cog" />&nbsp;
@@ -132,8 +144,8 @@ export default class UserActions extends React.Component {
                 </Button>
 
                 <Button
-                    onClick={this.removeStation}
-                    disabled={this.state.removeDisabled}
+                    onClick={this.removeUser}
+                    disabled={this.state.removeLoginDisabled}
                     bsStyle="danger"
                     bsSize="xsmall">
                     <Glyphicon glyph="trash" />&nbsp;
@@ -142,8 +154,8 @@ export default class UserActions extends React.Component {
 
                 <Modal
                     {...this.props}
-                    show={this.state.editorOpen}
-                    onHide={this.hideEditor}
+                    show={this.state.editorLoginOpen}
+                    onHide={this.hideLoginEditor}
                     dialogClassName="custom-modal"
                 >
                     <Modal.Header closeButton>
@@ -172,10 +184,49 @@ export default class UserActions extends React.Component {
                         </form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.hideEditor}>Close</Button>
-                        <Button bsStyle="primary" onClick={this.saveLoginAndRole} disabled={this.state.saveDisabled} >Save</Button>
+                        <Button onClick={this.hideLoginEditor}>Close</Button>
+                        <Button bsStyle="primary" onClick={this.saveLoginAndRole} disabled={this.state.saveLoginDisabled} >Save</Button>
                     </Modal.Footer>
                 </Modal>
+
+
+                <Modal
+                    {...this.props}
+                    show={this.state.editorPasswordOpen}
+                    onHide={this.hidePasswordEditor}
+                    dialogClassName="custom-modal"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-login-lg">Edit password</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <FormGroup controlId="curUserPassword">
+                                <ControlLabel>Current password: </ControlLabel>
+                                <FormControl
+                                    type="text"
+                                    value={this.state.curPassword}
+                                    placeholder="Enter current user password"
+                                    onChange={this.handleCurPasswordChange}>
+                                </FormControl>
+                            </FormGroup>
+                            <FormGroup controlId="newUserPassword">
+                                <ControlLabel>New password: </ControlLabel>
+                                <FormControl
+                                    type="text"
+                                    value={this.state.newPassword}
+                                    placeholder="Enter new user password"
+                                    onChange={this.handleNewPasswordChange}>
+                                </FormControl>
+                            </FormGroup>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.hidePasswordEditor}>Close</Button>
+                        <Button bsStyle="primary" onClick={this.savePassword} disabled={this.state.savePasswordDisabled} >Save</Button>
+                    </Modal.Footer>
+                </Modal>
+
             </ButtonToolbar>
         );
     }

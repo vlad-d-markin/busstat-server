@@ -163,6 +163,46 @@ module.exports = {
     },
 
 
+    // *****************************************************************************************************************
+    // Change password of the user
+    // *****************************************************************************************************************
+    changePassword :   function(login, oldPassword, newPassword, callback) {
+        if(!newPassword) {
+            return callback(new Error("Incorrect new password"));
+        }
+
+        UserModel.findOne({login : login}, function(err, user) {
+            if (err) {
+                return callback(err);
+            }
+            if (!user) {
+                return callback(new Error('User was not found'));
+            }
+
+            // Compare hash of password
+            bcrypt.compare(oldPassword, user.password, function(err, res) {
+                if(err) {
+                    return callback(err, null);
+                }
+                if(!res) {
+                    return callback(new Error('Incorrect password'));
+                }
+
+                // Store hash in your password DB.
+                bcrypt.hash(newPassword, config.hash.saltRound, function (err, hash) {
+                    if (err) {
+                        return callback(err);
+                    }
+                    user.password = hash;
+
+                    user.save(function (err) {
+                        return callback(null);
+                    });
+                });
+            });
+        });
+    },
+
 
     // *****************************************************************************************************************
     // Find user in database by id
