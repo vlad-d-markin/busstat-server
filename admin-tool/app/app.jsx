@@ -92,6 +92,7 @@ ReactDOM.render(
         />
         <Route path="stations" resource={server.api.stations} component={Stations}/>
         <Route path="routes" component={Routes}/>
+        <Route path="about" component={About}/>
         <Route path="*" component={About}/>
       </Route>
   </Router>, 
