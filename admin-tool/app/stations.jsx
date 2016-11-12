@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Panel, Glyphicon, Row, Col, Alert } from 'react-bootstrap';
+import { Button, Panel, Glyphicon, Row, Col, Alert, InputGroup, FormControl } from 'react-bootstrap';
 
 
 // New components
@@ -15,6 +15,8 @@ export default class Stations extends React.Component {
     this.state = {
       stations : this.props.route.resource,
       stationsList : [],
+
+      searchStation: '',
 
       alerts : [],
       
@@ -33,6 +35,8 @@ export default class Stations extends React.Component {
 
     this.newStationFormDone = this.newStationFormDone.bind(this);
     this.stationActionDone = this.stationActionDone.bind(this);
+
+    this.handleSearchLineChange = this.handleSearchLineChange.bind(this);
   }
 
   // New handlers
@@ -57,6 +61,9 @@ export default class Stations extends React.Component {
     }
   }
 
+  handleSearchLineChange(e) {
+    this.setState({ searchStation : e.target.value } );
+  }
 
   update() {
     this.state.stations.get().then(function(resp) {
@@ -95,18 +102,29 @@ export default class Stations extends React.Component {
           <NewStationForm stations={this.state.stations} onDone={this.newStationFormDone} />
 
             <Row>
-              <Col sm={4}>
+              <Col sm={2}>
                 <Panel>
                   <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
                 </Panel>
               </Col>
-                <Col sm={8}>{alert}</Col>
+              <Col sm={5}> {alert} </Col>
+              <Col sm={5}>
+                <Panel>
+                  <InputGroup>
+                    <InputGroup.Addon>
+                      <Glyphicon glyph="search" />
+                    </InputGroup.Addon>
+                    <FormControl type="text" placeholder="Station" onChange={this.handleSearchLineChange} />
+                  </InputGroup>
+                </Panel>
+              </Col>
             </Row>
 
           <StationsTable
               stations={this.state.stationsList}
               stationsResource={this.state.stations}
               onActionDone={this.stationActionDone}
+              searchStation={this.state.searchStation}
               rowsPerPage={14}
           />
      </div>

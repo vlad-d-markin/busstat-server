@@ -5,7 +5,11 @@ import { Pagination, Table, Col, Row} from 'react-bootstrap';
 import StationActions from './StationActions.jsx';
 
 
-// Props: stations [Array], stationsResource [RestClient resource], onActionDone [function(message, error)]
+// Props:
+// stations [Array],
+// stationsResource [RestClient resource],
+// search station [String]
+// onActionDone [function(message, error)]
 export default class StationsTable extends React.Component {
     constructor(props) {
         super(props);
@@ -27,7 +31,12 @@ export default class StationsTable extends React.Component {
 
     render() {
 
-        var stationTableItems = this.props.stations.map(function(station, idx){
+        var searchWord = this.props.searchStation;
+        var displayedStations = this.props.stations.filter( function(el) {
+            return (el.title.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1);
+        });
+
+        var stationTableItems = displayedStations.map(function(station, idx){
             return(
                 <tr key={idx}>
                     <td>{idx + 1}</td>

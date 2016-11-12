@@ -60,7 +60,7 @@ export default class UserActions extends React.Component {
     }
 
     updateUserData(nextProps) {
-        this.setState({ newLogin: nextProps.user.login});
+        this.setState({ newLogin: nextProps.user.login, newRole: nextProps.user.role});
     }
 
 

@@ -7,6 +7,8 @@ import UserActions from './UserActions.jsx';
 // PROPS:
 // users        [users list]
 // usersAPI     [ARC resource]
+// searchLogin  [string]
+// searchRole   [string] // admin, user, all
 // onActionDone [function(message, error)]
 // rowsPerPage  [Number of users per page]
 export default class UsersTable extends React.Component {
@@ -42,7 +44,17 @@ export default class UsersTable extends React.Component {
     }
 
     render() {
-        var usersTableItems = this.props.users.map(function(user, idx){
+        var searchLogin = this.props.searchLogin;
+        var searchRole = this.props.searchRole;
+        var displayedUsers = this.props.users.filter( function(el) {
+            if(searchRole === 'all') {
+                return (el.login.toLowerCase().indexOf(searchLogin.toLowerCase()) !== -1);
+            } else {
+                return (el.login.toLowerCase().indexOf(searchLogin.toLowerCase()) !== -1) && (el.role === searchRole);
+            }
+        });
+
+        var usersTableItems = displayedUsers.map(function(user, idx){
             return(
                 <tr key={idx}>
                     <td className="text-center">{idx + 1}</td>
