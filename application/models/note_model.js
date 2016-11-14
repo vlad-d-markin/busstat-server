@@ -8,7 +8,8 @@ var Note = new Schema({
     n_id: { type: Number, required: true },
     time: { type: Date, required: true },
     s_id: { type: Number, required: true },
-    r_id: { type: Number, required: true }
+    r_id: { type: Number, required: true },
+    author: { type: String, required: true}
 });
 
 

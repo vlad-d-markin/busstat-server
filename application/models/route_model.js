@@ -8,9 +8,7 @@ var Route = new Schema({
     title:          { type: String, required: true, unique: true },
     transport_type: { type: String, required: true },
     cost:           { type: Number, required: true },
-    stations:       { type: [] },
     r_id:           { type: Number }
-
 });
 
 

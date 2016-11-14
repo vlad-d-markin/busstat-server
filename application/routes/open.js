@@ -38,7 +38,7 @@ router.post('/token', function (req, res) {
             logger.warn('Requesting token error: '+err.message);
         }
         else {
-            res.json({success: true, token: user.token}).end();
+            res.json({success: true, token: user.token, role: user.role}).end();
             logger.info('Requesting '+req.body.login+'\'s token was successful');
         }
     });

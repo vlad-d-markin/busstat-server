@@ -46,6 +46,10 @@ app.use('/api', routeApiRoutes);
 app.use('/api', noteApiRotes);
 
 
+app.get('*', function (request, response){
+    response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+});
+
 
 // Server launch
 var port = process.env.PORT || config.server.defaultPort;
