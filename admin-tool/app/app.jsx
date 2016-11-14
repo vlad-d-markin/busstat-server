@@ -22,7 +22,7 @@ var server = new RestClient("");
 server.res({
   token : 0,
   registration: '',
-  api : ['users', 'stations', 'test', 'admin']
+  api : ['users', 'stations', 'test', 'admin', 'routes']
 });
 
 server.token.post({ login: "admin", password: "admin"}).then(function(res){
@@ -91,7 +91,9 @@ ReactDOM.render(
                component={Users}
         />
         <Route path="stations" resource={server.api.stations} component={Stations}/>
-        <Route path="routes" component={Routes}/>
+        <Route path="routes"
+               routesAPI={server.api.routes}
+               component={Routes}/>
         <Route path="about" component={About}/>
         <Route path="*" component={About}/>
       </Route>
