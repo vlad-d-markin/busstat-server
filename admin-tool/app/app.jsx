@@ -97,11 +97,11 @@ function requireAuth(nextState, replace) {
 
 ReactDOM.render(
   <Router history={browserHistory}>
-      <Route path="/" component={App}>
+      <Route path="/">
         <IndexRoute component={About} />
         <Route path="login" tokenAPI={server.token} component={Login} />
         <Route path="about" component={About} />
-        <Route path="admin" onEnter={requireAuth}>
+        <Route path="admin" component={App} onEnter={requireAuth}>
           <Route path="users"
                  usersAPI={server.api.users}
                  adminAPI={server.api.admin}

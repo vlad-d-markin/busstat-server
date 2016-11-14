@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Button, MenuItem, InputGroup, Col, ControlLabel, Form, FormGroup,
-    FormControl, Glyphicon, ButtonToolbar } from 'react-bootstrap';
+    FormControl, Glyphicon, ButtonToolbar, Panel } from 'react-bootstrap';
 
 
 export default class Login extends React.Component {
@@ -22,15 +22,20 @@ export default class Login extends React.Component {
         this.setInProgressState = this.setInProgressState.bind(this);
         this.handleLoginChange  = this.handleLoginChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.cleanInputs = this.cleanInputs.bind(this);
+        this.cleanLogin = this.cleanLogin.bind(this);
+        this.cleanPassword = this.cleanPassword.bind(this);
+
     }
 
 
     submitLogin() {
         this.setInProgressState(true);
         this.props.route.tokenAPI.post({'login': this.state.login, 'password': this.state.password}).then(function (resp) {
-            this.cleanInputs(false);
+            this.setInProgressState(false);
             if(resp.success && (resp.role == 'admin')) {
+                this.cleanLogin();
+                this.cleanPassword();
+
                 localStorage.setItem('et_admin.token', resp.token);
                 console.log("Successfully log in");
 
@@ -41,15 +46,20 @@ export default class Login extends React.Component {
                     this.props.router.replace('/admin');
                 }
             } else {
+                this.cleanPassword();
                 localStorage.removeItem('et_admin.token');
                 console.error("Failed to log in");
                 // TODO: LOH - try again
             }
-        }.bind(this));
+        }.bind(this)).catch(function(e) { console.log(e); });
     }
 
-    cleanInputs() {
-        this.setState( { login: '', password: '' });
+    cleanLogin() {
+        this.setState( { login: '' });
+    }
+
+    cleanPassword() {
+        this.setState( { password: '' });
     }
 
     // Handle changing input
@@ -69,52 +79,53 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <Form horizontal>
+            <Col sm={6} smOffset={3}>
+            <Panel>
+                <Form horizontal>
+                    <FormGroup controlId="login">
 
-                <FormGroup controlId="login">
-
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Login
-                    </Col>
-                    <Col sm={9}>
-                        <FormControl
-                            type="login"
-                            value={this.state.login}
-                            placeholder="Login"
-                            onChange={this.handleLoginChange}>
-                        </FormControl>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup controlId="password">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Password
-                    </Col>
-                    <Col sm={9}>
-                        <InputGroup>
+                        <Col componentClass={ControlLabel} sm={2}>
+                            Login
+                        </Col>
+                        <Col sm={9}>
                             <FormControl
-                                type="text"
+                                type="login"
+                                value={this.state.login}
+                                placeholder="Login"
+                                onChange={this.handleLoginChange}>
+                            </FormControl>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="password">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            Password
+                        </Col>
+                        <Col sm={9}>
+                            <FormControl
+                                type="password"
                                 value={this.state.password}
                                 placeholder="Password"
                                 onChange={this.handlePasswordChange}>
                             </FormControl>
-                        </InputGroup>
-                    </Col>
-                </FormGroup>
+                        </Col>
+                    </FormGroup>
 
-                <FormGroup>
-                    <Col sm={9} smOffset={2}>
-                        <ButtonToolbar className="pull-right">
-                            <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
-                                <Glyphicon glyph="remove" /> Clear
-                            </Button>
-                            <Button bsStyle="primary" onClick={this.submitLogin} disabled={this.state.controlsDisabled} >
-                                <Glyphicon glyph="ok" /> Submit
-                            </Button>
-                        </ButtonToolbar>
-                    </Col>
-                </FormGroup>
-            </Form>
+                    <FormGroup>
+                        <Col sm={9} smOffset={2}>
+                            <ButtonToolbar className="pull-right">
+                                <Button bsStyle="default" onClick={this.cleanInputs} disabled={this.state.controlsDisabled} >
+                                    <Glyphicon glyph="remove" /> Clear
+                                </Button>
+                                <Button bsStyle="primary" onClick={this.submitLogin} disabled={this.state.controlsDisabled} >
+                                    <Glyphicon glyph="ok" /> Submit
+                                </Button>
+                            </ButtonToolbar>
+                        </Col>
+                    </FormGroup>
+                </Form>
+            </Panel>
+                </Col>
         )
     }
 }
