@@ -1,0 +1,13 @@
+.verticalAlign {
+    display: flex;
+    flex-direction: row;
+}
+
+.verticalAlign > [class^="col-"],
+.verticalAlign > [class*=" col-"] {
+    display: flex;
+    align-items: center;
+    /*justify-content: center; !* Optional, to align inner items
+                              horizontally inside the column */
+}
+

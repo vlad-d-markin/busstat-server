@@ -5,9 +5,10 @@
   "main": "application/application.js",
   "scripts": {
     "postinstall": "webpack --config ./admin-tool/webpack.config.js --progress --colors",
+    "webpack-watch": "webpack --config ./admin-tool/webpack.config.js --progress --colors --watch",
     "start": "node application/application.js",
     "test": "mocha test",
-	"dev-admin" : "webpack-dev-server --progress --colors --host 0.0.0.0 --port 9000 --content-base admin-tool/public/ --config admin-tool/webpack.config.js"
+    "dev-admin": "webpack-dev-server --progress --colors --host 0.0.0.0 --port 9000 --content-base admin-tool/public/ --config admin-tool/webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -31,10 +32,12 @@
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-alpha.1",
+    "css-loader": "^0.25.0",
     "express": "^4.14.0",
     "express-favicon": "^2.0.0",
     "express-session": "^1.14.1",
     "express-static": "^1.0.3",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "jsonwebtoken": "^7.1.9",
     "jwt-simple": "^0.5.0",
@@ -51,6 +54,7 @@
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",
     "react-router": "^3.0.0",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
     "winston": "^2.2.0"
   },

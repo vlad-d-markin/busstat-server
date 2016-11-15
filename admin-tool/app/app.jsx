@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Panel, Alert,Grid, Row, Col, Button, Glyphicon} from 'react-bootstrap';
+import { Panel, Alert,Grid, Row, Col, Button, ButtonToolbar, Glyphicon} from 'react-bootstrap';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
+import commonStyles from '../styles/common.css';
 
 
 import Login from './login.jsx'
@@ -17,8 +18,6 @@ import RestClient from 'another-rest-client'
 require('file?name=[name].[ext]!../public/index.html');
 
 var server = new RestClient("");
-// var server = new RestClient("https://busstat-server.herokuapp.com");
-// var server = new RestClient("http://dev-tool-vladdmarkin900424.codeanyapp.com:8000");
 
 server.res({
   token : 0,
@@ -62,12 +61,12 @@ class App extends React.Component {
     
     return (
       <Grid>
-        <Row>
+        <Row className={commonStyles.verticalAlign}>
           <Col md={10}>
             <h1>Effective travel <small>developer tools</small></h1>
           </Col>
-          <Col>
-            <Button className="text-left" bsStyle="primary" onClick={this.handleLogout}>Sign out</Button>
+          <Col md={2}>
+              <Button bsStyle="primary" className="pull-right" onClick={this.handleLogout}>Sign out</Button>
           </Col>
 
 
@@ -93,7 +92,6 @@ class App extends React.Component {
 }
 
 function requireAuth(nextState, replace) {
-  console.log("AUTH = "+ !localStorage.getItem('et_admin.token'));
   if (!localStorage.getItem('et_admin.token')) {
     replace({
       pathname: '/login',
