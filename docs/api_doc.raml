@@ -1,0 +1,491 @@
+#%RAML 0.8
+title: BusStat
+version: 0.1
+baseUri: busstat-server.herokuapp.com
+
+/registration:
+    post:
+        description: Register in the BusStat database  `(for all)`
+        queryParameters:
+            login:
+                required: true
+                type: string
+            password:
+                required: true
+                type: string
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU4MmE0YzQyMTg3YjIzMzU4NTU4NzcyYyIsImV4cCI6MTQ3OTc3MTg0MzE5NH0.W0evG2FS46kLFm5fxW8jRGMj33Fj5LQ-ky5uswVDSqs",
+                            }
+                            {
+                                "success": false,
+                                "error": "E11000 duplicate key error index: busstat-db.users.$login_1 dup key: { : "new_test" }"
+                            }
+/token:
+    post:
+        description: Requesting token for existed user  `(for all)`
+        queryParameters:
+            login:
+                required: true
+                type: string
+            password:
+                required: true
+                type: string
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU4MmE0YzQyMTg3YjIzMzU4NTU4NzcyYyIsImV4cCI6MTQ3OTc3MjI2NzUwMH0.QKTBpO7h7F3nQxqrUOzwW58bboieYTQ-_MvxEhvs7Kw",
+                                "role": "user"
+                            }
+                            {
+                                "success": false,
+                                "error": "User xxx not found"
+                            }
+
+/api/test:
+    post:
+        description: Test call API '(for users)'
+        queryParameters:
+        responses:
+                    200:
+                        body:
+                            application/json:
+                                example: |
+                                    {
+                                        success: true,
+                                        message: "Test api call",
+                                        user: {User}
+                                    }
+                                    {
+                                        success: false,
+                                        error: "message"
+                                    }
+
+
+/api/admin:
+    post:
+        description: Create new admin  `(for admins)`
+        queryParameters:
+            login:
+                required: true
+                type: string
+            password:
+                required: true
+                type: string
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU4MmE2MmRkODhmM2UxNTEzNzdmM2VhOCIsImV4cCI6MTQ3OTc3NzYyOTczN30.2kaPin2FwMrkt0DizP12vTUCG2dIVvYAchj41O5P9vg"
+                            }
+                            {
+                                "success": false,
+                                "error": "message"
+                            }
+
+/api/users:
+    get:
+        description: Getting list of users  `(for admins)`
+        queryParameters:
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            "success": true,
+                            "users": [
+                                {
+                                    "_id": "57fd4739c83ef72864be7e80",
+                                    "login": "adminname",
+                                    "role": "admin"
+                                },
+                                {
+                                    "_id": "57fea8c72e722d13abc1af55",
+                                    "login": "username",
+                                    "role": "user"
+                                } ]
+    /:login:
+        delete:
+            description: Login changing `(for admins)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true
+                                }
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+    /login:
+        post:
+            description: Login changing `(for users)`
+            queryParameters:
+                login:
+                    required: true
+                    type: string
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true
+                                }
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+    /login/:oldlogin:
+         post:
+             description: Login changing  `(for admins)`
+             queryParameters:
+                 login:
+                     required: true
+                     type: string
+                 role:
+                     required: true
+                     type: string
+             responses:
+                 200:
+                     body:
+                         application/json:
+                             example: |
+                                 {
+                                     "success": true
+                                 }
+                                 {
+                                     "success": false,
+                                     "error": "message"
+                                 }
+    /password:
+        post:
+            description: Password changing `(for users)`
+            queryParameters:
+                password:
+                    required: true
+                    type: string
+                newPassword:
+                    required: true
+                    type: string
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true
+                                }
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+    /password/:login:
+         post:
+             description: Login changing  `(for admins)`
+             queryParameters:
+                 password:
+                     required: true
+                     type: string
+                 newPassword:
+                     required: true
+                     type: string
+             responses:
+                 200:
+                     body:
+                         application/json:
+                             example: |
+                                 {
+                                     "success": true
+                                 }
+                                 {
+                                     "success": false,
+                                     "error": "message"
+                                 }
+
+
+
+/api/routes:
+    get:
+        description: Getting list of routes  `(for users)`
+        queryParameters:
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                                "routes": [
+                                {
+                                    "r_id": 14,
+                                    "title": "85",
+                                    "cost": 20,
+                                    "transport_type": "bus"
+                                },
+                                {
+                                    "r_id": 15,
+                                    "title": "64",
+                                    "cost": 20,
+                                    "transport_type": "bus"
+                                } ]
+                            }
+    post:
+        description: Add new route  `(for admins)`
+        queryParameters:
+            title:
+                required: true
+                type: string
+            transport_type:
+                required: true
+                type: string
+            cost:
+                required: true
+                type: number
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                            }
+                            {
+                                "success": false,
+                                "error": "message"
+                            }
+    /:r_id:
+        get:
+            description: Getting the route  `(for users)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true,
+                                    "routes":
+                                        {
+                                            "r_id": 14,
+                                            "title": "85",
+                                            "cost": 20,
+                                            "transport_type": "bus"
+                                        }
+                                }
+        put:
+            description: Edit the route  `(for admins)`
+            queryParameters:
+                title:
+                    required: false
+                    type: string
+                transport_type:
+                    required: false
+                    type: string
+                cost:
+                    required: false
+                    type: number
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true,
+                                }
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+        delete:
+            description: Delete the route  `(for admins)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+                                {
+                                    "success": true
+                                }
+
+
+
+/api/stations:
+    get:
+        description: Getting list of stations  `(for users)`
+        queryParameters:
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                                "stations": [
+                                    {
+                                        "_id": "580f35b7e7f4df26468c08d7",
+                                        "s_id": 0,
+                                        "title": "MININA"
+                                    },
+                                    {
+                                        "_id": "580f36a91bc6d426794057b1",
+                                        "s_id": 3,
+                                        "title": "MOSCWAR"
+                                    } ]
+                            }
+    post:
+        description: Add new station  `(for admins)`
+        queryParameters:
+            title:
+                required: true
+                type: string
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                            }
+                            {
+                                "success": false,
+                                "error": "message"
+                            }
+    /:s_id:
+        put:
+            description: Edit the station  `(for admins)`
+            queryParameters:
+                title:
+                    required: false
+                    type: string
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true,
+                                }
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+        delete:
+            description: Delete the station  `(for admins)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+                                {
+                                    "success": true
+                                }
+
+
+
+/api/notes:
+    get:
+        description: Getting list of notes  `(for admins)`
+        queryParameters:
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: |
+                            {
+                                "success": true,
+                                    "notes": [
+                                        {
+                                            "n_id": 73,
+                                            "time": "2016-10-25T15:55:00.000Z",
+                                            "s_id": 1,
+                                            "r_id": 11,
+                                            "author": "xxx"
+                                        },
+                                        {
+                                            "n_id": 74,
+                                            "time": "2016-11-07T15:59:00.000Z",
+                                            "s_id": 1,
+                                            "r_id": 11,
+                                            "author": "xxx"
+                                        } ]
+                            }
+    /:s_id/:r_id:
+        post:
+            description: Add new note  `(for users)`
+            queryParameters:
+                time:
+                    required: false
+                    type: string
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+                                {
+                                    "success": true
+                                }
+    /:s_weeks:
+        get:
+            description: Get notes for last n weeks  `(for admins)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true,
+                                    "notes": [
+                                        {
+                                            "n_id": 74,
+                                            "time": "2016-11-07T15:59:00.000Z",
+                                            "s_id": 1,
+                                            "r_id": 11
+                                        }
+                                }
+    /:n_id:
+        delete:
+         description: Delete the note  `(for admins)`
+         queryParameters:
+         responses:
+             200:
+                 body:
+                     application/json:
+                         example: |
+                             {
+                                 "success": false,
+                                 "error": "message"
+                             }
+                             {
+                                 "success": true
+                             }

@@ -9,6 +9,12 @@ var userManager = require('../libs/user_manager');
 var logger = require('../libs/logger')(module);
 
 
+// Autharization of new User
+router.get('/test', auth().authenticate(), function (req, res) {
+    res.json({ success: true, message: "Test api call", user: req.user}).end();
+});
+
+
 // Registration of new User
 router.post('/registration', function (req, res) {
     userManager.createUser(req.body.login, req.body.password, 'user', function (err) {

@@ -11,12 +11,6 @@ var stationManager = require('../libs/station_manager');
 
 
 
-// Autharization of new User
-router.get('/test', auth().authenticate(), function (req, res) {
-    res.json({ success: true, message: "Test api call", user: req.user}).end();
-});
-
-
 // Receiving station list
 router.get('/stations', auth().authenticate(), function (req,res) {
     stationManager.getAllStations(function (err, stations) {
