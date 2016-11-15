@@ -1,11 +1,13 @@
 import React from 'react';
 import { Pagination, Table, Col, Row} from 'react-bootstrap';
 
-/*routes={this.state.routesList}
-routesAPI={this.state.routesAPI}
-{/!*onActionDone={this.routeActionDone}*!/}
-searchRoute={this.state.searchRoute}
-rowsPerPage={14}*/
+// PROPS:
+// routes           [list of routes]
+// routesAPI        [ARC resource]
+// {/!*onActionDone={this.routeActionDone}*!/}
+// searchRoute      [string]
+// searchType       [string]
+// rowsPerPage      [number]
 
 export default class RoutesTable extends React.Component {
     constructor(props) {

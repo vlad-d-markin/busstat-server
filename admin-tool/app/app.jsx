@@ -46,6 +46,12 @@ class App extends React.Component {
   handleLogout() {
     localStorage.removeItem('et_admin.token');
     // TODO: redirect to /login
+    const { location } = this.props
+    if (location.state && location.state.nextPathname) {
+      this.props.router.replace(location.state.nextPathname)
+    } else {
+      this.props.router.replace('/login');
+    }
   }
   
   
@@ -61,7 +67,7 @@ class App extends React.Component {
             <h1>Effective travel <small>developer tools</small></h1>
           </Col>
           <Col>
-            <Button className="text-left" bsStyle="primary" onClick={this.handleLogout}>BUSSTAT</Button>
+            <Button className="text-left" bsStyle="primary" onClick={this.handleLogout}>Sign out</Button>
           </Col>
 
 
@@ -102,7 +108,6 @@ ReactDOM.render(
       <Route path="/">
         <IndexRoute component={About} />
         <Route path="login" tokenAPI={server.token} component={Login} />
-        <Route path="about" component={About} />
         <Route path="admin" component={App} onEnter={requireAuth}>
           <Route path="users"
                  usersAPI={server.api.users}
@@ -122,8 +127,7 @@ ReactDOM.render(
                  onEnter={requireAuth}
           />
         </Route>
-        <Route path="about" component={About}/>
-        <Route path="*" component={About}/>
+{/*        <Route path="*" component={About}/>*/}
       </Route>
   </Router>, 
   document.body);

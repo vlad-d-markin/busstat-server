@@ -78,45 +78,47 @@ export default class Routes extends React.Component {
       var alert = this.state.showAlert ? <Alert bsStyle={this.state.alertStyle}>{this.state.alertText}</Alert> : '';
 
     return (
-    <div>
-      <NewRouteForm
-      routesAPI = {this.state.routesAPI} onDone = {this.newRouteFormDone}/>
-      <Row>
-        <Col sm={2}>
-          <Panel>
-            <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
-          </Panel>
-        </Col>
-        <Col sm={5}> {alert} </Col>
-        <Col sm={5}>
-          <Panel>
-            <InputGroup>
-              <InputGroup.Addon>
-                <Glyphicon glyph="search" />
-              </InputGroup.Addon>
-              <FormControl type="text" placeholder="title" onChange={this.handleSearchLineChange} />
-              <DropdownButton
-                  componentClass={InputGroup.Button}
-                  id="input-dropdown-addon"
-                  title={this.state.searchType}>
-                <MenuItem key="1" onClick={this.handleSearchLineAll}>all</MenuItem>
-                <MenuItem key="2" onClick={this.handleSearchLineBus}>bus</MenuItem>
-                <MenuItem key="3" onClick={this.handleSearchLineShuttleBus}>shuttlebus</MenuItem>
-                <MenuItem key="4" onClick={this.handleSearchLineTrolleyBus}>trolleybus</MenuItem>
-                <MenuItem key="5" onClick={this.handleSearchLineTramway}>tramway</MenuItem>
-              </DropdownButton>
-            </InputGroup>
-          </Panel>
-        </Col>
-      </Row>
-      <RoutesTable
-          routes={this.state.routesList}
-          routesAPI={this.state.routesAPI}
-          searchRoute={this.state.searchRoute}
-          searchType={this.state.searchType}
-          rowsPerPage={14}
-      />
-    </div>
+        <div>
+            <NewRouteForm
+                routesAPI = {this.state.routesAPI}
+                onDone = {this.newRouteFormDone}
+            />
+            <Row>
+                <Col sm={2}>
+                    <Panel>
+                        <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
+                    </Panel>
+                </Col>
+                <Col sm={5}> {alert} </Col>
+                <Col sm={5}>
+                    <Panel>
+                        <InputGroup>
+                            <InputGroup.Addon>
+                                <Glyphicon glyph="search" />
+                            </InputGroup.Addon>
+                            <FormControl type="text" placeholder="title" onChange={this.handleSearchLineChange} />
+                            <DropdownButton
+                                componentClass={InputGroup.Button}
+                                id="input-dropdown-addon"
+                                title={this.state.searchType}>
+                                <MenuItem key="1" onClick={this.handleSearchLineAll}>all</MenuItem>
+                                <MenuItem key="2" onClick={this.handleSearchLineBus}>bus</MenuItem>
+                                <MenuItem key="3" onClick={this.handleSearchLineShuttleBus}>shuttlebus</MenuItem>
+                                <MenuItem key="4" onClick={this.handleSearchLineTrolleyBus}>trolleybus</MenuItem>
+                                <MenuItem key="5" onClick={this.handleSearchLineTramway}>tramway</MenuItem>
+                            </DropdownButton>
+                        </InputGroup>
+                    </Panel>
+                </Col>
+            </Row>
+            <RoutesTable
+                routes={this.state.routesList}
+                routesAPI={this.state.routesAPI}
+                searchRoute={this.state.searchRoute}
+                searchType={this.state.searchType}
+                rowsPerPage={14}
+            />
+        </div>
     );
   }
 }

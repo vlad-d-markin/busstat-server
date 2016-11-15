@@ -92,7 +92,7 @@ export default class Login extends React.Component {
         return (
             <div>
                 <Row>
-                    <Col sm={6} smOffset={3}> <h1 className="text-center">BusStat Admin tool</h1> </Col>
+                    <Col sm={6} smOffset={3}> <h1 className="text-center">Effective Travel Admin tool</h1> </Col>
                 </Row>
                 <Row>
                     <Col sm={6} smOffset={3}>

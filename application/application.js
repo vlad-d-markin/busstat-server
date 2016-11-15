@@ -46,8 +46,13 @@ app.use('/api', routeApiRoutes);
 app.use('/api', noteApiRotes);
 
 
-app.get('*', function (request, response){
-    response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+app.get('/api_doc', function (req, res) {
+    res.sendFile(path.resolve(__dirname, '..', 'docs', 'api_doc.html'));
+});
+
+
+app.get('*', function (req, res){
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 
