@@ -5,6 +5,7 @@ import { Carousel } from 'react-bootstrap';
 export default class About extends React.Component {
   render() {
     return (
+
     <Carousel>
         <Carousel.Item>
             <img width={900} height={500} alt="900x500" src="https://pp.vk.me/c425325/v425325006/4c5b/_s_0CtAMdXI.jpg"/>

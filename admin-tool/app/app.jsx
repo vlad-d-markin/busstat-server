@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Panel, Alert,Grid, Row, Col} from 'react-bootstrap';
+import { Panel, Alert,Grid, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
 
 
@@ -26,19 +26,6 @@ server.res({
   api : ['users', 'stations', 'test', 'admin', 'routes']
 });
 
-// API TEST !!!
-/*
-server.token.post({ login: "admin", password: "admin"}).then(function(res){
-  if(res.success) {
-    localStorage.setItem('et_admin.token', res.token);
-    console.log('Successsfully requested token');
-  }
-  else {
-    localStorage.setItem('et_admin.token', null);
-    console.error('Failed to request token');
-  }
-});
-*/
 
 server.on('request', function(xhr) {
   //var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU4MDdhYzNkZjVlNTdkMGQ3MDcwNTQ1OSIsImV4cCI6MTQ3ODUyODUxOTgwOX0.s2Vc0SvxzWHZ_6f4eL3FuqJyOO6NTLUPNhdjZ4phjT8';
@@ -52,6 +39,13 @@ class App extends React.Component {
     this.state= {
       messages : [ ]
     };
+
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout() {
+    localStorage.removeItem('et_admin.token');
+    // TODO: redirect to /login
   }
   
   
@@ -63,17 +57,25 @@ class App extends React.Component {
     return (
       <Grid>
         <Row>
-          <Col md={12}><h1>Effective travel <small>developer tools</small></h1></Col>
+          <Col md={10}>
+            <h1>Effective travel <small>developer tools</small></h1>
+          </Col>
+          <Col>
+            <Button className="text-left" bsStyle="primary" onClick={this.handleLogout}>BUSSTAT</Button>
+          </Col>
+
+
         </Row>
         
         <Row>
           <Col md={2}>
             <Menu/>
+
           </Col>
           
           <Col md={10}>
             {messages}
-            
+
             <Panel>
               {this.props.children}
             </Panel>
