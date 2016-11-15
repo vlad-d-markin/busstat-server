@@ -10,6 +10,12 @@ var auth = require('../libs/auth');
 var userManager = require('../libs/user_manager');
 
 
+// Autharization of new User
+router.get('/test', auth().authenticate(), function (req, res) {
+    res.json({ success: true, message: "Test api call", user: req.user}).end();
+});
+
+
 
 // Getting list of all users (login + role)
 router.get('/users', auth().authenticate(), function (req, res) {

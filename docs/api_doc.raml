@@ -51,25 +51,6 @@ baseUri: busstat-server.herokuapp.com
                                 "error": "User xxx not found"
                             }
 
-/api/test:
-    post:
-        description: Test call API '(for users)'
-        queryParameters:
-        responses:
-                    200:
-                        body:
-                            application/json:
-                                example: |
-                                    {
-                                        success: true,
-                                        message: "Test api call",
-                                        user: {User}
-                                    }
-                                    {
-                                        success: false,
-                                        error: "message"
-                                    }
-
 
 /api/admin:
     post:
@@ -95,6 +76,25 @@ baseUri: busstat-server.herokuapp.com
                                 "error": "message"
                             }
 
+/api/test:
+    post:
+        description: Test call API `(for users)`
+        queryParameters:
+        responses:
+                    200:
+                        body:
+                            application/json:
+                                example: |
+                                    {
+                                        success: true,
+                                        message: "Test api call",
+                                        user: {User}
+                                    }
+                                    {
+                                        success: false,
+                                        error: "message"
+                                    }
+
 /api/users:
     get:
         description: Getting list of users  `(for admins)`
@@ -116,6 +116,7 @@ baseUri: busstat-server.herokuapp.com
                                     "login": "username",
                                     "role": "user"
                                 } ]
+
     /:login:
         delete:
             description: Login changing `(for admins)`
