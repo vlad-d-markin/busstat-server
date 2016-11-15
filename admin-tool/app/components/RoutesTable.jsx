@@ -40,8 +40,13 @@ export default class RoutesTable extends React.Component {
 
     render() {
         var searchRoute = this.props.searchRoute;
+        var searchType = this.props.searchType;
         var displayedRoutes = this.props.routes.filter(function (el) {
-            return (el.title.toLowerCase().indexOf(searchRoute.toLowerCase()) !== -1);
+            if(searchType === 'all') {
+                return (el.title.toLowerCase().indexOf(searchRoute.toLowerCase()) !== -1);
+            } else {
+                return (el.title.toLowerCase().indexOf(searchRoute.toLowerCase()) !== -1) && (el.transport_type === searchType);
+            }
         });
 
         var routesTableItems = displayedRoutes.map(function(route, idx){
