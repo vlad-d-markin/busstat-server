@@ -116,7 +116,7 @@ export default class UserActions extends React.Component {
     }
 
 
-    // Remove station
+    // Remove user
     removeUser() {
         this.setState({removeLoginDisabled: true});
         this.props.usersAPI(this.props.user.login).delete().then(function (resp) {

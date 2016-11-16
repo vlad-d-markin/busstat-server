@@ -50,6 +50,7 @@
     "passport-jwt": "^2.1.0",
     "passport-local": "^1.0.0",
     "passport-vkontakte": "^0.3.2",
+    "raml2html": "^3.0.1",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",

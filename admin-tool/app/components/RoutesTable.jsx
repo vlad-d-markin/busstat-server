@@ -1,4 +1,5 @@
 import React from 'react';
+import RouteActions from './RouteActions.jsx';
 import { Pagination, Table, Col, Row} from 'react-bootstrap';
 
 // PROPS:
@@ -60,11 +61,11 @@ export default class RoutesTable extends React.Component {
                     <td>{route.transport_type}</td>
                     <td>{route.cost}</td>
                     <td>
-                        {/*<RouteActions
-                            route={route}
+                        <RouteActions
+                            route = {route}
+                            routesAPI = {this.props.routesAPI}
                             onDone={this.props.onActionDone}
-                            routesAPI={this.props.routesAPI}
-                        />*/}
+                        />
                     </td>
                 </tr>
             );

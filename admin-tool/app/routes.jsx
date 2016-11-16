@@ -33,7 +33,17 @@ export default class Routes extends React.Component {
     this.handleSearchLineShuttleBus = this.handleSearchLineShuttleBus.bind(this);
     this.handleSearchLineTramway = this.handleSearchLineTramway.bind(this);
     this.handleSearchLineTrolleyBus = this.handleSearchLineTrolleyBus.bind(this);
+    this.routeActionDone = this.routeActionDone.bind(this);
   }
+
+    routeActionDone(text, err) {
+        if(err) {
+            this.showAlert(text+" "+err.message, 'danger');
+        } else {
+            this.showAlert(text, 'success');
+            this.update();
+        }
+    }
 
     newRouteFormDone(err) {
       if(err) {
@@ -116,6 +126,7 @@ export default class Routes extends React.Component {
                 routesAPI={this.state.routesAPI}
                 searchRoute={this.state.searchRoute}
                 searchType={this.state.searchType}
+                onActionDone={this.routeActionDone}
                 rowsPerPage={14}
             />
         </div>
