@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, DropdownButton, InputGroup, MenuItem, Modal, Glyphicon, ButtonToolbar,
-    FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
+    FormGroup, FormControl, ControlLabel, Row, Col } from 'react-bootstrap';
 
 /*props:
  route
@@ -48,7 +48,7 @@ export default class RouteActions extends React.Component {
     }
 
     updateRouteData(nextProps){
-        this.setState({newTitle: nextProps.route.title, newCost: nextProps.route.cost, newType: nextProps.route.type});
+        this.setState({newTitle: nextProps.route.title, newCost: nextProps.route.cost, newType: nextProps.route.transport_type});
     }
 
     // Handle changing in Route editor
@@ -128,32 +128,54 @@ export default class RouteActions extends React.Component {
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-route-rt">Edit route</Modal.Title>
                     </Modal.Header>
+
                     <Modal.Body>
                         <form>
                             <FormGroup controlId="newRouteTitleCostType">
-                                <ControlLabel>Title: </ControlLabel>
-                                <InputGroup>
-                                    <FormControl
-                                        type="text"
-                                        value={this.state.newTitle}
-                                        placeholder="Enter new route title"
-                                        onChange={this.handleTitleChange}>
-                                    </FormControl>
-                                   {/* <DropdownButton
-                                        componentClass={InputGroup.Button}
-                                        id="input-dropdown-addon"
-                                        title={this.state.newType}>
-                                        <MenuItem key="1" onClick={this.handleTypeBusChange}>bus</MenuItem>
-                                        <MenuItem key="2" onClick={this.handleTypeShuttleBusChange}>shuttlebus</MenuItem>
-                                        <MenuItem key="3" onClick={this.handleTypeTrolleyBusChange}>trolleybus</MenuItem>
-                                        <MenuItem key="4" onClick={this.handleTypeTramwayChange}>tramway</MenuItem>
-                                    </DropdownButton>*/}
-                                </InputGroup>
+                                <Row>
+                                    <div className="text-center">
+                                    <Col sm={4} smOffset={1}>
+                                        <ControlLabel>Title: </ControlLabel>
+                                        <InputGroup>
+                                            <FormControl
+                                                type="text"
+                                                value={this.state.newTitle}
+                                                placeholder="Enter new route title"
+                                                onChange={this.handleTitleChange}>
+                                            </FormControl>
+                                        </InputGroup>
+                                    </Col>
+                                    <Col sm={2} smOffset={1}>
+                                        <ControlLabel>Cost: </ControlLabel>
+                                        <InputGroup>
+                                            <FormControl
+                                                type="text"
+                                                value={this.state.newCost}
+                                                placeholder="Enter new route title"
+                                                onChange={this.handleCostChange}>
+                                            </FormControl>
+                                        </InputGroup>
+                                    </Col>
+                                    <Col sm={4}>
+                                        <ControlLabel>Type: </ControlLabel>
+                                        <DropdownButton
+                                            title={this.state.newType}
+                                            componentClass={InputGroup.Button}
+                                            id="input-dropdown-addon">
+                                            <MenuItem key="1" onClick={this.handleTypeBusChange}>bus</MenuItem>
+                                            <MenuItem key="2" onClick={this.handleTypeShuttleBusChange}>shuttlebus</MenuItem>
+                                            <MenuItem key="3" onClick={this.handleTypeTrolleyBusChange}>trolleybus</MenuItem>
+                                            <MenuItem key="4" onClick={this.handleTypeTramwayChange}>tramway</MenuItem>
+                                        </DropdownButton>
+                                    </Col>
+                                        </div>
+                            </Row>
                             </FormGroup>
                         </form>
                     </Modal.Body>
+
                     <Modal.Footer>
-                        <Button onClick={this.hideRouteEditor()}>Close</Button>
+                        <Button onClick={this.hideRouteEditor}>Close</Button>
                         <Button bsStyle="primary" onClick={this.saveTitleAndCostAndType} disabled={this.state.saveRouteDisabled} >Save</Button>
                     </Modal.Footer>
                 </Modal>
