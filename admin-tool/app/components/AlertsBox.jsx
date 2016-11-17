@@ -1,27 +1,23 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
+import commonStyles from '../../styles/common.css';
 
 
 // Props: alerts [Array]:[{message, style}, ...]
-export default class Stations extends React.Component {
+export default class AlertsBox extends React.Component {
     constructor(props) {
-        this.state = {
-            message : '',
-            style : 'default'
-        };
-
-        this.nextAlert = this.nextAlert.bind(this);
-    }
-
-    nextAlert() {
-        var next = this.props.alerts.pop();
-        this.setState({ message: next.message, style: next.style });
+      super(props);
     }
 
     render() {
-        if(this.props && this.props.length) {
-
-        }
-        return(<Alert bsStyle={this.state.style}>{this.state.message}</Alert>);
+        var alerts = this.props.alerts.map(function(alert) {
+          return (<Alert bsStyle={alert.style}>{alert.message}</Alert>);
+        });
+      
+        return(
+          <div className={commonStyles.alertOverlayBox} >
+            {alerts}
+          </div>
+        );
     }
 }

@@ -11,3 +11,14 @@
                               horizontally inside the column */
 }
 
+
+.alertOverlayBox {
+  position: fixed;
+  bottom: 14px;
+  left: 14px;
+  width: 200px;
+  z-index: 100;
+  border: 1px solid red;
+}
+
+

@@ -54,6 +54,7 @@ export default class Stations extends React.Component {
   stationActionDone(message, error) {
     if(error) {
       this.showAlert(message, 'danger');
+      console.log(error);
     }
     else {
       this.showAlert(message, 'success');
@@ -83,6 +84,8 @@ export default class Stations extends React.Component {
 
   // Deprecated
   showAlert(text, style) {
+    this.props.showAlert(text, style);
+        
     this.setState({ showAlert: true, alertStyle : style, alertText : text });
     window.setTimeout(function () {
       this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });

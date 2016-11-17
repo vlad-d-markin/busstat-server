@@ -11,6 +11,7 @@ import Users from './users.jsx';
 import Stations from './stations.jsx';
 import Routes from './routes.jsx';
 import About from './about.jsx';
+import AlertsBox from './components/AlertsBox.jsx';
 
 
 import RestClient from 'another-rest-client'
@@ -31,15 +32,36 @@ server.on('request', function(xhr) {
   xhr.setRequestHeader('Authorization', 'JWT ' + localStorage.getItem('et_admin.token'));
 });
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     
     this.state= {
-      messages : [ ]
+      messages : [ ],
+      alerts : [],
+      nextMessageId : 1
     };
 
     this.handleLogout = this.handleLogout.bind(this);
+    this.showAlert = this.showAlert.bind(this);
+    this.getNextMessageId = this.getNextMessageId.bind(this);
+  }
+  
+  getNextMessageId() {
+    var ID = this.state.nextMessageId;
+    this.setState({nextMessageId : ID + 1});
+    return ID;
+  }
+  
+  showAlert(message, style) {
+    var alerts = this.state.alerts;
+    var id = this.getNextMessageId();
+    alerts.push({ message: message, style : style, id : id });
+    window.setTimeout(function() {
+      this.setState({ alerts : this.state.alerts.filter(function(el) { return el.id != id } ) } );
+    }.bind(this), 4000);
+    this.setState({ alerts : alerts });
   }
 
   handleLogout() {
@@ -60,33 +82,36 @@ class App extends React.Component {
     });
     
     return (
-      <Grid>
-        <Row className={commonStyles.verticalAlign}>
-          <Col md={10}>
-            <h1>Effective travel <small>developer tools</small></h1>
-          </Col>
-          <Col md={2}>
-              <Button bsStyle="primary" className="pull-right" onClick={this.handleLogout}>Sign out</Button>
-          </Col>
+      <div>
+        <AlertsBox alerts={this.state.alerts} />
+        <Grid>
+          <Row className={commonStyles.verticalAlign}>
+            <Col md={10}>
+              <h1>Effective travel <small>developer tools</small></h1>
+            </Col>
+            <Col md={2}>
+                <Button bsStyle="primary" className="pull-right" onClick={this.handleLogout}>Sign out</Button>
+            </Col>
 
 
-        </Row>
-        
-        <Row>
-          <Col md={2}>
-            <Menu/>
+          </Row>
 
-          </Col>
-          
-          <Col md={10}>
-            {messages}
+          <Row>
+            <Col md={2}>
+              <Menu/>
 
-            <Panel>
-              {this.props.children}
-            </Panel>
-          </Col>
-        </Row>
-      </Grid>
+            </Col>
+
+            <Col md={10}>
+              {messages}
+
+              <Panel>
+                {this.props.children &&  React.cloneElement(this.props.children, { showAlert : this.showAlert }) }
+              </Panel>
+            </Col>
+          </Row>
+        </Grid>
+      </div>
       );
   }
 }
@@ -111,7 +136,7 @@ ReactDOM.render(
                  usersAPI={server.api.users}
                  adminAPI={server.api.admin}
                  registrationAPI={server.registration}
-                 component={Users}
+                 component={Users} 
                  onEnter={requireAuth}
           />
           <Route path="stations"
@@ -128,4 +153,4 @@ ReactDOM.render(
 {/*        <Route path="*" component={About}/>*/}
       </Route>
   </Router>, 
-  document.body);
+  document.getElementById("app"));

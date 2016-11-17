@@ -158,15 +158,16 @@ export default class RouteActions extends React.Component {
                                     </Col>
                                     <Col sm={4}>
                                         <ControlLabel>Type: </ControlLabel>
+                                        <InputGroup className="text-center">
                                         <DropdownButton
                                             title={this.state.newType}
-                                            componentClass={InputGroup.Button}
                                             id="input-dropdown-addon">
                                             <MenuItem key="1" onClick={this.handleTypeBusChange}>bus</MenuItem>
                                             <MenuItem key="2" onClick={this.handleTypeShuttleBusChange}>shuttlebus</MenuItem>
                                             <MenuItem key="3" onClick={this.handleTypeTrolleyBusChange}>trolleybus</MenuItem>
                                             <MenuItem key="4" onClick={this.handleTypeTramwayChange}>tramway</MenuItem>
                                         </DropdownButton>
+                                      </InputGroup>
                                     </Col>
                                         </div>
                             </Row>
