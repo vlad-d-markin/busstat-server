@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Row, Col, Panel, Button, Glyphicon, ButtonToolbar,
+import {Alert, Row, Col, Panel, Button, Glyphicon, ButtonToolbar, ButtonGroup,
         InputGroup, FormControl, DropdownButton, MenuItem} from 'react-bootstrap';
 
 
@@ -67,10 +67,12 @@ export default class Users extends React.Component {
     }
 
     showAlert(text, style) {
-        this.setState({ showAlert: true, alertStyle : style, alertText : text });
-        window.setTimeout(function () {
-            this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
-        }.bind(this), 3000);
+      this.props.showAlert(text, style);
+      
+//         this.setState({ showAlert: true, alertStyle : style, alertText : text });
+//         window.setTimeout(function () {
+//             this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
+//         }.bind(this), 3000);
     }
 
     handleSearchLineChange(e)   { this.setState({ searchLogin : e.target.value } ); }
@@ -104,13 +106,12 @@ export default class Users extends React.Component {
                     registrationAPI={this.state.registrationAPI}
                     onDone={this.newUserFormDone} />
                 <Row>
-                    <Col sm={2}>
+                    <Col sm={3}>
                         <Panel>
                             <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
                         </Panel>
                     </Col>
-                    <Col sm={5}> {alert} </Col>
-                    <Col sm={5}>
+                    <Col sm={9}>
                         <Panel>
                             <InputGroup>
                                 <InputGroup.Addon>

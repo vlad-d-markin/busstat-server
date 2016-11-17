@@ -107,12 +107,23 @@ export default class NewRouteForm extends React.Component {
                             Title
                         </Col>
                         <Col sm={9}>
+                          <InputGroup>
+                            <DropdownButton
+                                componentClass={InputGroup.Button}
+                                id="input-dropdown-addon"
+                                title={this.state.transport_type}>
+                                <MenuItem key="1" onClick={this.handleBusTypeSelect}>bus</MenuItem>
+                                <MenuItem key="2" onClick={this.handleShuttleBusTypeSelect}>shuttlebus</MenuItem>
+                                <MenuItem key="3" onClick={this.handleTramwayTypeSelect}>tramway</MenuItem>
+                                <MenuItem key="4" onClick={this.handleTrolleyBusTypeSelect}>trolleybus</MenuItem>
+                            </DropdownButton>
                             <FormControl
                                 type="text"
                                 value={this.state.title}
                                 placeholder="title"
                                 onChange={this.handleTitleChange}>
                             </FormControl>
+                          </InputGroup>
                         </Col>
                     </FormGroup>
 
@@ -120,24 +131,13 @@ export default class NewRouteForm extends React.Component {
                         <Col componentClass={ControlLabel} sm={2}>
                             Cost
                         </Col>
-                        <Col sm={9}>
-                            <InputGroup>
+                        <Col sm={9}>                           
                                 <FormControl
                                     type="text"
                                     value={this.state.cost}
                                     placeholder="Cost"
                                     onChange={this.handleCostChange}>
-                                </FormControl>
-                                <DropdownButton
-                                    componentClass={InputGroup.Button}
-                                    id="input-dropdown-addon"
-                                    title={this.state.transport_type}>
-                                    <MenuItem key="1" onClick={this.handleBusTypeSelect}>bus</MenuItem>
-                                    <MenuItem key="2" onClick={this.handleShuttleBusTypeSelect}>shuttlebus</MenuItem>
-                                    <MenuItem key="3" onClick={this.handleTramwayTypeSelect}>tramway</MenuItem>
-                                    <MenuItem key="4" onClick={this.handleTrolleyBusTypeSelect}>trolleybus</MenuItem>
-                                </DropdownButton>
-                            </InputGroup>
+                                </FormControl>                 
                         </Col>
                     </FormGroup>
 

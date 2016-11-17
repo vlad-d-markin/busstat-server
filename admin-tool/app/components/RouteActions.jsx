@@ -137,6 +137,15 @@ export default class RouteActions extends React.Component {
                                     <Col sm={4} smOffset={1}>
                                         <ControlLabel>Title: </ControlLabel>
                                         <InputGroup>
+                                            <DropdownButton
+                                                title={this.state.newType}
+                                                componentClass={InputGroup.Button}
+                                                id="input-dropdown-addon">
+                                                <MenuItem key="1" onClick={this.handleTypeBusChange}>bus</MenuItem>
+                                                <MenuItem key="2" onClick={this.handleTypeShuttleBusChange}>shuttlebus</MenuItem>
+                                                <MenuItem key="3" onClick={this.handleTypeTrolleyBusChange}>trolleybus</MenuItem>
+                                                <MenuItem key="4" onClick={this.handleTypeTramwayChange}>tramway</MenuItem>
+                                            </DropdownButton>
                                             <FormControl
                                                 type="text"
                                                 value={this.state.newTitle}
@@ -156,20 +165,7 @@ export default class RouteActions extends React.Component {
                                             </FormControl>
                                         </InputGroup>
                                     </Col>
-                                    <Col sm={4}>
-                                        <ControlLabel>Type: </ControlLabel>
-                                        <InputGroup className="text-center">
-                                        <DropdownButton
-                                            title={this.state.newType}
-                                            id="input-dropdown-addon">
-                                            <MenuItem key="1" onClick={this.handleTypeBusChange}>bus</MenuItem>
-                                            <MenuItem key="2" onClick={this.handleTypeShuttleBusChange}>shuttlebus</MenuItem>
-                                            <MenuItem key="3" onClick={this.handleTypeTrolleyBusChange}>trolleybus</MenuItem>
-                                            <MenuItem key="4" onClick={this.handleTypeTramwayChange}>tramway</MenuItem>
-                                        </DropdownButton>
-                                      </InputGroup>
-                                    </Col>
-                                        </div>
+                                    </div>
                             </Row>
                             </FormGroup>
                         </form>

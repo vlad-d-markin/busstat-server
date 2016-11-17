@@ -86,10 +86,10 @@ export default class Stations extends React.Component {
   showAlert(text, style) {
     this.props.showAlert(text, style);
         
-    this.setState({ showAlert: true, alertStyle : style, alertText : text });
-    window.setTimeout(function () {
-      this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
-    }.bind(this), 3000);
+//     this.setState({ showAlert: true, alertStyle : style, alertText : text });
+//     window.setTimeout(function () {
+//       this.setState({ showAlert: false, alertStyle : 'info', alertText : 'Nothing happened' });
+//     }.bind(this), 3000);
   }
   // ==========
 
@@ -105,13 +105,12 @@ export default class Stations extends React.Component {
           <NewStationForm stations={this.state.stations} onDone={this.newStationFormDone} />
 
             <Row>
-              <Col sm={2}>
+              <Col sm={3}>
                 <Panel>
                   <Button onClick={this.update}><Glyphicon glyph="refresh" /> Refresh</Button>
                 </Panel>
               </Col>
-              <Col sm={5}> {alert} </Col>
-              <Col sm={5}>
+              <Col sm={9}>
                 <Panel>
                   <InputGroup>
                     <InputGroup.Addon>

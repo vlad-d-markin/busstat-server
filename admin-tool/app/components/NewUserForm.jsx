@@ -102,12 +102,21 @@ export default class NewUserForm extends React.Component {
                             Login
                         </Col>
                         <Col sm={9}>
-                            <FormControl
-                                type="login"
-                                value={this.state.newUser.login}
-                                placeholder="Login"
-                                onChange={this.handleLoginChange}>
-                            </FormControl>
+                            <InputGroup>
+                                <DropdownButton
+                                    componentClass={InputGroup.Button}
+                                    id="input-dropdown-addon"
+                                    title={this.state.userRole}>
+                                    <MenuItem key="1" onClick={this.handleUserRoleSelect}>user</MenuItem>
+                                    <MenuItem key="2" onClick={this.handleAdminRoleSelect}>admin</MenuItem>
+                                </DropdownButton>
+                                <FormControl
+                                    type="login"
+                                    value={this.state.newUser.login}
+                                    placeholder="Login"
+                                    onChange={this.handleLoginChange}>
+                                </FormControl>
+                            </InputGroup>
                         </Col>
                     </FormGroup>
 
@@ -116,21 +125,12 @@ export default class NewUserForm extends React.Component {
                             Password
                         </Col>
                         <Col sm={9}>
-                            <InputGroup>
                                 <FormControl
                                     type="text"
                                     value={this.state.newUser.password}
                                     placeholder="Password"
                                     onChange={this.handlePasswordChange}>
-                                </FormControl>
-                                <DropdownButton
-                                    componentClass={InputGroup.Button}
-                                    id="input-dropdown-addon"
-                                    title={this.state.userRole}>
-                                    <MenuItem key="1" onClick={this.handleUserRoleSelect}>user</MenuItem>
-                                    <MenuItem key="2" onClick={this.handleAdminRoleSelect}>admin</MenuItem>
-                                </DropdownButton>
-                            </InputGroup>
+                                </FormControl>                                
                         </Col>
                     </FormGroup>
 
