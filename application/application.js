@@ -29,7 +29,7 @@ db.on('open', function () {
 });
 db.on('error', function () {
     logger.error('Failed to connect to DB ' + config.db.url);
-    process.exit(-1);
+    //process.exit(-1);
 });
 
 
