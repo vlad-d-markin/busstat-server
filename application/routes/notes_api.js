@@ -33,12 +33,11 @@ router.get('/notes', auth().authenticate(), function (req, res) {
 
 // Creating a user note
 router.post('/notes/:s_id/:r_id', auth().authenticate(), function (req, res) {
-    noteManager.createNote(req.body.time, req.params.s_id, req.params.r_id, function(err) {
+    noteManager.createNote(req.body.time, req.params.s_id, req.params.r_id, req.user.login, function(err) {
         if(err) {
             res.json({success: false, error: err.message}).end();
             logger.warn('Adding note by user ' + req.user.login + ' error: ' + err.message);
-        }
-        if(!err) {
+        } else {
             res.json({success: true}).end();
             logger.info('User '+req.user.login+' sent note: S_ID = '+req.params.s_id+' R_ID = '
                 +req.params.r_id+' TIME = '+req.body.time);
