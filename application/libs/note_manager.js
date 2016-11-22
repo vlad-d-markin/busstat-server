@@ -7,6 +7,7 @@
 var NoteModel = require('./../models/note_model');
 var routeManager = require('./route_manager');
 var stationManager = require('./station_manager');
+var statisticsManager = require('./statistics_manager');
 
 var MAX_AHEAD = new Date(2*60*1000);
 var MAX_LAG = new Date(24*60*60*1000);
@@ -15,7 +16,7 @@ var MAX_LAG = new Date(24*60*60*1000);
 module.exports = {
 
     // Creating a user note
-    createNote: function (time, s_id, r_id, callback) {
+    createNote: function (time, s_id, r_id, author, callback) {
         var note_time = Date.parse(time);
         if (isNaN(note_time) == true) {
             return callback(new Error('Incorrect time'));
@@ -48,14 +49,21 @@ module.exports = {
                 var new_note = new NoteModel({
                     time: time,
                     s_id: s_id,
-                    r_id: r_id
+                    r_id: r_id,
+                    author: author
                 });
 
                 new_note.save(function (err) {
                     if(err) {
                         return callback(err);
                     }
-                    return callback(null);
+                    statisticsManager.handleNote(s_id, r_id, time, function (err) {
+                        if(err) {
+                            return callback(err);
+                        } else {
+                            return callback(null);
+                        }
+                    });
                 });
             });
         });
