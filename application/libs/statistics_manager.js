@@ -106,12 +106,67 @@ var manager = {
 
         new_statistics.save(function (err) {
             if(err) {
-                console.log("NOT CREATED = "+err);
                 return callback(err);
             }
             return callback(null);
         });
-    }
+    },
+
+//not tested, only wrote
+    calculateStatistics : function (s_id,r_id,callback) {
+        StatisticsModel.findOne({s_id: s_id, r_id: r_id}, function (err, statistics) {
+            if (err) {
+                return callback(err);
+            }
+            if (!statistics) {
+                return callback(new Error("Statistics not found!"));
+            }
+
+            var countOfWeekNotes = 0;
+            statistics.weekdaysCount.forEach(function (el, i) {
+                countOfWeekNotes = countOfWeekNotes + el.count;
+            });
+
+            var countOfFridayNotes = 0;
+            statistics.fridayCount.forEach(function (el, i) {
+                countOfFridayNotes = countOfFridayNotes + el.count;
+            });
+
+            var countOfWeekendNotes = 0;
+            statistics.weekendCount.forEach(function (el, i) {
+                countOfWeekendNotes = countOfWeekendNotes + el.count;
+            });
+                console.log("COUNT!!!: "+countOfWeekNotes);
+            statistics.weekdaysCount.forEach(function (el, i) {
+                statistics.weekdaysFreq[i].count = el.count/countOfWeekNotes;
+            });
+
+            statistics.fridayCount.forEach(function (el, i) {
+                statistics.fridayFreq[i].count = el.count/countOfFridayNotes;
+            });
+
+            statistics.weekendCount.forEach(function (el, i) {
+                statistics.weekendFreq[i].count = el.count/countOfWeekendNotes;
+            });
+
+            statistics.save(function (err) {
+                if(err) {
+                    return callback(err);
+                }
+                return callback(null);
+            });
+        });
+    },
+
+    getStatistics : function (s_id, r_id, callback) {
+        StatisticsModel.find({s_id: s_id, r_id: r_id},{weekdaysFreq: true, fridayFreq: true, weekendFreq: true},function(err, statistics) {
+            if(err) {
+                return callback(err, null);
+            } else {
+                return callback(null,statistics);
+            }
+        });
+    },
 
 };
 

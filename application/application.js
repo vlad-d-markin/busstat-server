@@ -39,11 +39,13 @@ var userRoutes = require('./routes/users_api');
 var stationApiRoutes = require('./routes/stations_api');
 var routeApiRoutes = require('./routes/routes_api');
 var noteApiRotes = require('./routes/notes_api');
+var statisticsApiRotes = require('./routes/statistics_api');
 app.use('/', openRoutes);
 app.use('/api', userRoutes);
 app.use('/api', stationApiRoutes);
 app.use('/api', routeApiRoutes);
 app.use('/api', noteApiRotes);
+app.use('/api', statisticsApiRotes);
 
 
 app.get('/api_doc', function (req, res) {
