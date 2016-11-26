@@ -4,6 +4,7 @@
 // ========================================
 
 var StatisticsModel = require('./../models/statistics_model');
+var StationModel = require('./../models/station_model');
 
 
 var interval = 5;  // TODO: constants
@@ -167,6 +168,24 @@ var manager = {
             }
         });
     },
+//TODO stations
+    updateStatistics : function (callback) {
+        StationModel.find({},{},function(err,stations){
+            if(err){
+                return callback(err);
+            }
+            stations.forEach(function (el,i) {
+                el.stations.forEach(function (route,j) {
+                    manager.calculateStatistics(el.s_id, route, function (err) {
+                        if(err){
+                            return callback(err);
+                        }
+                    })
+                })
+            })
+        })
+        return callback(null);
+    }
 
 };
 
