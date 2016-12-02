@@ -490,3 +490,49 @@ baseUri: busstat-server.herokuapp.com
                              {
                                  "success": true
                              }
+
+/api/statistics:
+    /:s_id/:r_id:
+        get:
+            description: Getting arrays of time frequencies of weekdays, friday and weekend
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true,
+                                    "statistics": [
+                                      {
+                                        "_id": "5834a6eb105dd835389c2946",
+
+                                        "weekendFreq": [            [288 elements]
+                                            {
+                                                "time": "00:00",
+                                                "_id": "5834a6eb105dd835389c294c",
+                                                "count": 0
+                                            },
+                                            {
+                                                "time": "00:05",
+                                                "_id": "5834a6eb105dd835389c2952",
+                                                "count": 0
+                                            },
+                                            .....
+                                            {
+                                                "time": "23:55",
+                                                "_id": "5834a6eb105dd835389c1242",
+                                                "count": 0
+                                            }
+                                        ],
+
+                                        "fridayFreq": [             [288 elements]
+                                            .....
+                                        ],
+
+                                        "weekdaysFreq": [           [288 elements]
+                                            .....
+                                        ],
+                                      }
+                                    ]
+                                }

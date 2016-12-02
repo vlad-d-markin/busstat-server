@@ -168,7 +168,8 @@ var manager = {
             }
         });
     },
-//TODO stations
+
+//TODO TODO TODO stations !!!
     updateStatistics : function (callback) {
         StationModel.find({},{},function(err,stations){
             if(err){
