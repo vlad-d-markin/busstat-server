@@ -13,7 +13,7 @@ var autoIncrement = require("mongoose-auto-increment");
 var Station = new Schema({
     title:      { type: String, required: true, unique: true },
     s_id:       { type: Number },
-    stations:   { type: [] },
+    routes:     { type: [] }
 });
 
 

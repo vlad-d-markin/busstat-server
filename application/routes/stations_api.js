@@ -89,4 +89,46 @@ router.put('/stations/:s_id', auth().authenticate(), function(req,res){
 });
 
 
+// Adding route for the station
+router.put('/stations/:s_id/:r_id', auth().authenticate(), function(req,res){
+    if(req.user.role == 'admin'){
+        stationManager.addRoute(req.params.s_id, req.params.r_id, function(err){
+            if(err){
+                res.json({success: false, error: err.message}).end();
+                logger.warn('Addding route for station S_ID='+req.params.s_id+' error: '+err.message);
+            }
+            else{
+                res.json({success: true}).end();
+                logger.info('Adding route for station S_ID='+req.params.s_id+' (R_ID='+req.params.r_id+') was done by '+req.user.login);
+            }
+        })
+    }
+    else{
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to edit station');
+    }
+});
+
+
+// Deleting route from the station
+router.delete('/stations/:s_id/:r_id', auth().authenticate(), function(req,res){
+    if(req.user.role == 'admin'){
+        stationManager.deleteRoute(req.params.s_id, req.params.r_id, function(err){
+            if(err){
+                res.json({success: false, error: err.message}).end();
+                logger.warn('Deleting route from station S_ID='+req.params.s_id+' error: '+err.message);
+            }
+            else{
+                res.json({success: true}).end();
+                logger.info('Deletting route from station S_ID='+req.params.s_id+' (R_ID='+req.params.r_id+') was done by '+req.user.login);
+            }
+        })
+    }
+    else{
+        res.json({success: false, error: 'Not enough access rights'}).end();
+        logger.info('User '+req.user.login+' try to edit station');
+    }
+});
+
+
 module.exports = router;

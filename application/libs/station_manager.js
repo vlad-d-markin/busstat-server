@@ -4,6 +4,7 @@
 // ========================================
 
 var StationModel = require('./../models/station_model');
+var RouteModel = require('./../models/route_model');
 
 
 module.exports ={
@@ -79,5 +80,60 @@ module.exports ={
             station.save();
             return callback(null);
         })
+    },
+
+
+    // Addding route for the station
+    addRoute   : function (s_id, r_id, callback) {
+        StationModel.findOne({s_id: s_id}, function (err, station) {
+            if (err) {
+                return callback(err);
+            }
+            if (!station) {
+                return callback(new Error('Incorrect s_id'));
+            }
+
+            RouteModel.findOne({r_id: r_id}, function (err, route) {
+                if (err) {
+                    return callback(err);
+                }
+                if (!route) {
+                    return callback(new Error('Incorrect r_id'));
+                }
+
+                for(var i = 0; i < station.routes.length; i++) {
+                    if(station.routes[i] == r_id) {
+                        return callback(new Error('Route is added already'));
+                    }
+                }
+
+                station.routes.push(r_id);
+                station.save();
+                return callback(null);
+            });
+        });
+    },
+
+
+    // Deleting route from the station
+    deleteRoute  : function (s_id, r_id, callback) {
+        StationModel.findOne({s_id: s_id}, function (err, station) {
+            if (err) {
+                return callback(err);
+            }
+            if (!station) {
+                return callback(new Error('Incorrect s_id'));
+            }
+
+            for (var i = 0; i < station.routes.length; i++) {
+                if (station.routes[i] == r_id) {
+                    station.routes.remove(r_id);
+                    station.save();
+                    return callback(null);
+                }
+            }
+
+            return callback(new Error('Route was not found'));
+        });
     }
 };

@@ -406,6 +406,37 @@ baseUri: busstat-server.herokuapp.com
                                 {
                                     "success": true
                                 }
+    /:s_id/:r_id:
+        put:
+            description: Add route for the station  `(for admins)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": true,
+                                }
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+        delete:
+            description: Delete route from the station  `(for admins)`
+            queryParameters:
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "success": false,
+                                    "error": "message"
+                                }
+                                {
+                                    "success": true
+                                }
 
 
 
