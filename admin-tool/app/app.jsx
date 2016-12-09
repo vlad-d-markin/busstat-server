@@ -66,7 +66,7 @@ class App extends React.Component {
 
   handleLogout() {
     localStorage.removeItem('et_admin.token');
-    // TODO: redirect to /login
+x
     const { location } = this.props
     if (location.state && location.state.nextPathname) {
       this.props.router.replace(location.state.nextPathname)
@@ -141,6 +141,7 @@ ReactDOM.render(
           />
           <Route path="stations"
                  resource={server.api.stations}
+                 routesAPI={server.api.routes}
                  component={Stations}
                  onEnter={requireAuth}
           />

@@ -8,6 +8,7 @@ import StationActions from './StationActions.jsx';
 // Props:
 // stations [Array],
 // stationsResource [RestClient resource],
+// routesRecource [RestClient resource],
 // search station [String]
 // onActionDone [function(message, error)]
 export default class StationsTable extends React.Component {
@@ -47,7 +48,10 @@ export default class StationsTable extends React.Component {
                         <StationActions
                             station={station}
                             onDone={this.props.onActionDone}
-                            resource={this.props.stationsResource(station.s_id)}/>
+                            resource={this.props.stationsResource(station.s_id)}
+                            stationsAPI={this.props.stationsResource}
+                            routesAPI={this.props.routesAPI}
+                        />
                     </td>
                 </tr>
             );

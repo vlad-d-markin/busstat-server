@@ -13,6 +13,7 @@ export default class Stations extends React.Component {
     super(props);
     
     this.state = {
+      routesAPI: this.props.route.routesAPI,
       stations : this.props.route.resource,
       stationsList : [],
 
@@ -26,7 +27,6 @@ export default class Stations extends React.Component {
 
       activePage : 1
     };
-
 
     this.update = this.update.bind(this);
     this.showAlert = this.showAlert.bind(this);
@@ -125,6 +125,7 @@ export default class Stations extends React.Component {
           <StationsTable
               stations={this.state.stationsList}
               stationsResource={this.state.stations}
+              routesAPI={this.state.routesAPI}
               onActionDone={this.stationActionDone}
               searchStation={this.state.searchStation}
               rowsPerPage={14}
