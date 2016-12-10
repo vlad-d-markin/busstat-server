@@ -5,7 +5,7 @@ var autoIncrement = require("mongoose-auto-increment");
 
 // Station table model in DB
 var Route = new Schema({
-    title:          { type: String, required: true, unique: true },
+    title:          { type: String, required: true, unique: false },
     transport_type: { type: String, required: true },
     cost:           { type: Number, required: true },
     r_id:           { type: Number }

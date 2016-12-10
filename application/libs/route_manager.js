@@ -15,18 +15,33 @@ module.exports ={
             return callback(new Error('Incorrect route'));
         }
 
-        var new_route = new RouteModel({
-            title: route.title,
-            cost: route.cost,
-            transport_type: route.transport_type
-        });
-
-        new_route.save(function (err) {
+        RouteModel.find({},{},function (err, routes) {
             if(err) {
                 return callback(err);
             }
-            return callback(null);
-        });
+            if(!routes) {
+                return callback(new Error('Search routes fail'))
+            }
+            for(var i=0; i<routes.length; i++) {
+                if( (route.title == routes[i].title) && (route.transport_type == routes[i].transport_type) ) {
+                    return callback(new Error('Route already exist'));
+                }
+            }
+
+            var new_route = new RouteModel({
+                title: route.title,
+                cost: route.cost,
+                transport_type: route.transport_type
+            });
+
+            new_route.save(function (err) {
+                if(err) {
+                    return callback(err);
+                }
+                return callback(null);
+            });
+        })
+
     },
 
     // Getting list of routes
