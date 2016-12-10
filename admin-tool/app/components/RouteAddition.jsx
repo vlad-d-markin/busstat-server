@@ -92,7 +92,7 @@ export default class RouteAddition extends React.Component {
             return(
                 <tr key={idx}>
                     <td className="text-center">{idx + 1}</td>
-                    <td>{route.title}</td>
+                    <td><center><b>{route.title}</b></center></td>
                     <td>{route.r_id}</td>
                     <td>{route.transport_type}</td>
                     <td>{route.cost}</td>
@@ -142,7 +142,7 @@ export default class RouteAddition extends React.Component {
                     <thead>
                         <tr>
                             <th width="5%" className="text-center">#</th>
-                            <th>Route</th>
+                            <th><center>Route</center></th>
                             <th>R_ID</th>
                             <th>Type</th>
                             <th>Cost</th>

@@ -3,7 +3,7 @@ import { Row, Button, DropdownButton, MenuItem, InputGroup, Col, ControlLabel, F
     FormControl, Panel, Glyphicon, ButtonToolbar } from 'react-bootstrap';
 
 // PROPS:
-// onDone    [function(error)]
+// onDone       [function(error)]
 // routeAPI  [server route] to create new user
 
 export default class NewRouteForm extends React.Component {

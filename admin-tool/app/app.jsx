@@ -66,7 +66,7 @@ class App extends React.Component {
 
   handleLogout() {
     localStorage.removeItem('et_admin.token');
-x
+
     const { location } = this.props
     if (location.state && location.state.nextPathname) {
       this.props.router.replace(location.state.nextPathname)

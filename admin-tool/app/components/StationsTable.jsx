@@ -33,14 +33,20 @@ export default class StationsTable extends React.Component {
     render() {
 
         var searchWord = this.props.searchStation;
+
+        var sortStations = this.props.stations.sort(function(a, b) {
+            return a.s_id - b.s_id;
+        });
+
         var displayedStations = this.props.stations.filter( function(el) {
             return (el.title.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1);
         });
 
+
         var stationTableItems = displayedStations.map(function(station, idx){
             return(
                 <tr key={idx}>
-                    <td>{idx + 1}</td>
+                    <td><center>{idx + 1}</center></td>
                     <td>{station.title}</td>
                     <td>{station.s_id}</td>
                     <td>not yet</td>
@@ -76,7 +82,7 @@ export default class StationsTable extends React.Component {
                 <Table striped bordered condensed hover>
                     <thead>
                     <tr>
-                        <th>#</th>
+                        <th><center>#</center></th>
                         <th>Title</th>
                         <th>S_ID</th>
                         <th>Coordinates</th>

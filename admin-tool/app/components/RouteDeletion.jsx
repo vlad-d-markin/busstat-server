@@ -40,8 +40,11 @@ export default class RouteDeletion extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.update();
+        if (nextProps.station != this.props.station) {
+            this.setState( {station: nextProps.station } );
+        }
     }
+
 
     // Handle page selection
     handleSelect(e) {
@@ -58,6 +61,7 @@ export default class RouteDeletion extends React.Component {
 
     deleteRoute(r_id) {
         this.props.onActionDone(this.state.station.s_id, r_id);
+        this.render();
     }
 
 
@@ -100,7 +104,7 @@ export default class RouteDeletion extends React.Component {
             return(
                 <tr key={idx}>
                 <td className="text-center">{idx + 1}</td>
-                <td>{route.title}</td>
+                <td><center><b>{route.title}</b></center></td>
                 <td>{route.r_id}</td>
                 <td>{route.transport_type}</td>
                 <td>{route.cost}</td>
@@ -151,7 +155,7 @@ export default class RouteDeletion extends React.Component {
                     <thead>
                         <tr>
                             <th width="5%" className="text-center">#</th>
-                            <th>Route</th>
+                            <th><center>Route</center></th>
                             <th>R_ID</th>
                             <th>Type</th>
                             <th>Cost</th>

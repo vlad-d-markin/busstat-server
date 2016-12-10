@@ -47,6 +47,12 @@ export default class StationActions extends React.Component {
         this.deleteRoute = this.deleteRoute.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.station != this.props.station) {
+            this.setState( {station: nextProps.station } );
+        }
+    }
+
 
     //
     openEditor() {
@@ -92,6 +98,7 @@ export default class StationActions extends React.Component {
 
         this.props.resource.put({ title : this.state.title }).then(function (resp) {
             this.setState({ saveEditDisabled: false });
+            this.hideEditor();
 
             if(resp.success) {
                 console.log("Successfully saved changes");
@@ -99,7 +106,7 @@ export default class StationActions extends React.Component {
             }
             else {
                 console.error("Failed to save changes. Error: " + JSON.stringify(resp.error));
-                this.props.onDone("Failed to save changess", resp.error);
+                this.props.onDone("Failed to save changes", resp.error);
             }
         }.bind(this));
     }
@@ -178,6 +185,7 @@ export default class StationActions extends React.Component {
             <ButtonToolbar>
                 <Button
                     onClick={this.openAdditor}
+                    disabled={this.state.addDisabled}
                     bsStyle="success"
                     bsSize="xsmall">
                     <Glyphicon glyph="plus" />&nbsp;
@@ -185,6 +193,7 @@ export default class StationActions extends React.Component {
 
                 <Button
                     onClick={this.openRemover}
+                    disabled={this.state.removeDisabled}
                     bsStyle="warning"
                     bsSize="xsmall">
                     <Glyphicon glyph="remove" />&nbsp;
@@ -226,6 +235,10 @@ export default class StationActions extends React.Component {
                             </FormGroup>
                         </form>
                     </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.hideEditor}>Close</Button>
+                        <Button bsStyle="primary" onClick={this.saveEdittedChanges} disabled={this.state.saveLoginDisabled} >Save</Button>
+                    </Modal.Footer>
                 </Modal>
 
                 <Modal
