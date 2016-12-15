@@ -60,7 +60,6 @@ app.get('*', function (req, res){
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
-
 var j = schedule.scheduleJob('0 30 * * * *', function() {
     console.log('Statistics was updated / '+Date());
     statisticsManager.updateStatistics(function (err) {
@@ -72,6 +71,13 @@ var j = schedule.scheduleJob('0 30 * * * *', function() {
     });
 });
 
+statisticsManager.updateStatistics(function (err) {
+    if(err) {
+        console.log('Statistics update error: '+err);
+    } else {
+        console.log('Statistics was updated!')
+    }
+});
 
 // Server launch
 var port = process.env.PORT || config.server.defaultPort;
