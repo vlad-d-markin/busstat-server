@@ -24,7 +24,7 @@ module.exports = {
 
         var serv_time = Date.now();
         if( (note_time - serv_time) > MAX_AHEAD ) {
-            return callback(new Error('Time mismatch'));
+            return callback(new Error('Time mismatch / S_ID='+s_id+' R_ID='+r_id+' / '+time));
         }
         if( (serv_time - note_time) > MAX_LAG ) {
             return callback(new Error('Time out'));
