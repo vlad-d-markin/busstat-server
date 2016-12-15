@@ -137,18 +137,22 @@ var manager = {
             statistics.weekendCount.forEach(function (el, i) {
                 countOfWeekendNotes = countOfWeekendNotes + el.count;
             });
-                console.log("COUNT!!!: "+countOfWeekNotes);
-            statistics.weekdaysCount.forEach(function (el, i) {
-                statistics.weekdaysFreq[i].count = el.count/countOfWeekNotes;
-            });
 
-            statistics.fridayCount.forEach(function (el, i) {
-                statistics.fridayFreq[i].count = el.count/countOfFridayNotes;
-            });
-
-            statistics.weekendCount.forEach(function (el, i) {
-                statistics.weekendFreq[i].count = el.count/countOfWeekendNotes;
-            });
+            if(countOfWeekNotes != 0) {
+                statistics.weekdaysCount.forEach(function (el, i) {
+                    statistics.weekdaysFreq[i].count = el.count / countOfWeekNotes;
+                });
+            }
+            if(countOfFridayNotes != 0) {
+                statistics.fridayCount.forEach(function (el, i) {
+                    statistics.fridayFreq[i].count = el.count / countOfFridayNotes;
+                });
+            }
+            if(countOfWeekendNotes != 0) {
+                statistics.weekendCount.forEach(function (el, i) {
+                    statistics.weekendFreq[i].count = el.count / countOfWeekendNotes;
+                });
+            }
 
             statistics.save(function (err) {
                 if(err) {
@@ -169,14 +173,14 @@ var manager = {
         });
     },
 
-//TODO TODO TODO stations !!!
+
     updateStatistics : function (callback) {
         StationModel.find({},{},function(err,stations){
             if(err){
                 return callback(err);
             }
             stations.forEach(function (el,i) {
-                el.stations.forEach(function (route,j) {
+                el.routes.forEach(function (route,j) {
                     manager.calculateStatistics(el.s_id, route, function (err) {
                         if(err){
                             return callback(err);

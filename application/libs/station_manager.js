@@ -5,6 +5,7 @@
 
 var StationModel = require('./../models/station_model');
 var RouteModel = require('./../models/route_model');
+var statisticsManager = require('./statistics_manager');
 
 
 module.exports ={
@@ -109,7 +110,15 @@ module.exports ={
 
                 station.routes.push(r_id);
                 station.save();
-                return callback(null);
+
+                statisticsManager.createStatistics(s_id, r_id, function(err) {
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        return callback(null);
+                    }
+                });
+
             });
         });
     },

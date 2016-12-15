@@ -8,6 +8,9 @@ var config = require('./config');
 var mongoose = require('mongoose');
 var auth = require('./libs/auth');
 
+var schedule = require('node-schedule');
+var statisticsManager = require('./libs/statistics_manager');
+
 
 // Create express.js app
 var app = express();
@@ -55,6 +58,18 @@ app.get('/api_doc', function (req, res) {
 
 app.get('*', function (req, res){
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
+
+
+var j = schedule.scheduleJob('0 30 * * * *', function() {
+    console.log('Statistics was updated / '+Date());
+    statisticsManager.updateStatistics(function (err) {
+        if(err) {
+            console.log('Statistics update error: '+err);
+        } else {
+            console.log('Statistics was updated!')
+        }
+    });
 });
 
 
