@@ -60,7 +60,7 @@ app.get('*', function (req, res){
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
-var j = schedule.scheduleJob('0 30 * * * *', function() {
+var j = schedule.scheduleJob('10 * * * * *', function() {
     console.log('Statistics was updated / '+Date());
     statisticsManager.updateStatistics(function (err) {
         if(err) {
